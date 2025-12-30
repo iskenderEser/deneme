@@ -2,1010 +2,4745 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Davranış Karşılaştırma Testi — Benim Davranışlarım / Onun Davranışları</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+  <title>FAST CPR KOÇU - GÜVENLİ SÜRÜM</title>
+  
+  <!-- GÖRÜNMEZ DOĞRULAMA ETİKETİ -->
+  <span id="__verify__" style="display:none">FAST_CPR_v3_2024_LIC_9B7A2C</span>
+  
+  <script>
+  /* ============================================
+     KATMANLI KORUMA SİSTEMİ - DÜZGÜN VERSİYON
+     ============================================ */
+  
+  // Domain kontrolünü sayfa yüklendikten sonra yap
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1. DOMAİN KONTROLÜ (Test için tüm domainlere izin ver)
+    const allowedOrigins = [
+      'localhost',
+      '127.0.0.1',
+      'cpr-koçu.com',
+      'iskendereser.github.io',
+      'file://'  // Dosya sisteminden çalıştırmak için
+    ];
+    
+    const currentOrigin = window.location.hostname || window.location.protocol + '//';
+    const isAllowedOrigin = allowedOrigins.some(origin => 
+      currentOrigin.includes(origin) || 
+      window.location.protocol === 'file:'  // Dosya sistemi izni
+    );
+    
+    // Domain izinli değilse uyarı göster (ama çalışmaya devam et)
+    if (!isAllowedOrigin && window.location.protocol !== 'file:') {
+      console.warn('⚠️ Domain lisans uyarısı: ' + currentOrigin);
+      
+      // Sayfanın altına uyarı banner'ı ekle
+      const warningBanner = document.createElement('div');
+      warningBanner.style.cssText = `
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(90deg, #f59e0b, #dc2626);
+        color: white;
+        padding: 12px 20px;
+        text-align: center;
+        font-family: sans-serif;
+        font-size: 14px;
+        z-index: 9998;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      `;
+      warningBanner.innerHTML = `
+        <span style="font-weight:bold;">⚠️ LİSANS UYARISI:</span>
+        <span>Bu domain için lisans doğrulanamadı. Orijinal sürüm için: </span>
+        <a href="https://cpr-koçu.com" style="color:white;text-decoration:underline;font-weight:bold;">cpr-koçu.com</a>
+        <button onclick="this.parentElement.remove()" style="
+          background: rgba(255,255,255,0.2);
+          border: none;
+          color: white;
+          padding: 4px 12px;
+          border-radius: 20px;
+          margin-left: 10px;
+          cursor: pointer;
+        ">Kapat</button>
+      `;
+      document.body.appendChild(warningBanner);
+    }
+    
+    // 2. GİZLİ DOĞRULAMA KONTROLÜ
+    setTimeout(() => {
+      const verifyElement = document.getElementById('__verify__');
+      if (!verifyElement || verifyElement.textContent !== 'FAST_CPR_v3_2024_LIC_9B7A2C') {
+        console.warn('Gizli doğrulama hatası - Bazı özellikler kısıtlanabilir');
+        
+        // 2 dakika sonra PDF özelliğini devre dışı bırak
+        setTimeout(() => {
+          const pdfBtn = document.getElementById('fullReportPDF');
+          if (pdfBtn) {
+            pdfBtn.style.opacity = '0.5';
+            pdfBtn.style.cursor = 'not-allowed';
+            pdfBtn.title = 'Lisans doğrulama hatası - PDF özelliği devre dışı';
+            pdfBtn.onclick = function(e) {
+              e.preventDefault();
+              alert('PDF özelliği lisans doğrulama hatası nedeniyle devre dışı bırakıldı.');
+              return false;
+            };
+          }
+        }, 120000); // 2 dakika
+      }
+    }, 2000);
+    
+    // 3. ANTI-DEBUG (Sadece uyarı, engelleme yok)
+    let debuggerCount = 0;
+    const checkDebugger = setInterval(() => {
+      const start = Date.now();
+      (function(){}['constructor']('debugger')());
+      if (Date.now() - start > 100) {
+        debuggerCount++;
+        console.warn(`Debugger tespit edildi (${debuggerCount}/3)`);
+        
+        if (debuggerCount >= 3) {
+          clearInterval(checkDebugger);
+          // Sadece konsola uyarı yaz
+          console.error('Debugger birden fazla tespit edildi. Araç stabilitesi etkilenebilir.');
+        }
+      }
+    }, 1000);
+  });
+  </script>
 
+  <script src="https://unpkg.com/pdfmake@0.2.7/build/pdfmake.min.js"></script>
+  <script src="https://unpkg.com/pdfmake@0.2.7/build/vfs_fonts.js"></script>
+  
   <style>
-    :root {
-      /* Profesyonel renk paleti */
-      --bg: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --soft: #f9fafb;
-      --card-bg: #ffffff;
-      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-      --radius: 12px;
-      --radius-lg: 16px;
-      
-      /* Renk skalası 1-9 */
-      --color-1: #f3f4f6;
-      --color-2: #dbeafe;
-      --color-3: #bfdbfe;
-      --color-4: #93c5fd;
-      --color-5: #60a5fa;
-      --color-6: #3b82f6;
-      --color-7: #2563eb;
-      --color-8: #1d4ed8;
-      --color-9: #1e40af;
-      
-      /* Ben ve O renkleri */
-      --me-color: #3b82f6;
-      --other-color: #ef4444;
+    /* ============================================
+       TÜM CSS KODU - ORJİNAL
+       ============================================ */
+    
+    :root{
+      --bg:#ffffff;
+      --text:#111;
+      --muted:#666;
+      --border:#e6e6e6;
+      --soft:#fafafa;
+      --accent:#0b5fff;
+      --ok:#137333;
+      --warn:#b06000;
+      --bad:#b3261e;
+      --shadow: 0 10px 30px rgba(0,0,0,0.06);
+      --radius:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --touch-target: 44px;
+      --mobile-padding: 12px;
+      --keyboard-safe: env(safe-area-inset-bottom, 0px);
     }
-
-    * { 
-      box-sizing: border-box;
-      margin: 0;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:var(--bg);
+      color:var(--text);
+      padding:20px 14px calc(60px + var(--keyboard-safe));
+      padding-left: max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
     }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    
+    /* 📱 MOBİL OPTİMİZASYONU */
+    @media (max-width: 768px) {
+      body {
+        padding: var(--mobile-padding) var(--mobile-padding) calc(50px + var(--keyboard-safe));
+        font-size: 15px;
+      }
+      
+      .container {
+        max-width: 100%;
+        padding: 0;
+      }
+      
+      button, 
+      .btn,
+      [role="button"],
+      .voice-btn,
+      .mobile-toolbar button {
+        min-height: var(--touch-target);
+        min-width: var(--touch-target);
+        padding: 12px 16px !important;
+      }
+      
+      details.acc summary {
+        padding: 16px 14px;
+      }
+      
+      textarea:focus {
+        padding-bottom: calc(1em + var(--keyboard-safe));
+      }
+      
+      .mobile-toolbar {
+        display: flex !important;
+      }
+      
+      .two {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      .sub {
+        font-size: 14px;
+      }
+    }
+    
+    @media (max-width: 768px) and (orientation: landscape) {
+      body {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+      
+      .container {
+        max-height: 85vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      header {
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 100;
+        padding: 8px 0;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      :root {
+        --radius: 12px;
+        --mobile-padding: 10px;
+      }
+      
+      .card, .presetCard, details.acc {
+        border-radius: var(--radius);
+      }
+      
+      textarea {
+        font-size: 16px !important;
+      }
+    }
+    
+    /* =========================================== */
+    /* 📌 TÜM TEMEL CPR KARTI - TUTARLI GÖRSEL DİL */
+    /* =========================================== */
+    
+    /* 1. TÜM BÖLÜMLER İÇİN ORTAK KART STİLİ */
+    .cpr-section-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 18px 16px 12px 16px;
+      background: #f8fafc;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* 2. BÖLÜM BAŞLIK ETİKETLERİ */
+    .cpr-section-card::before {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: white;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #4b5563;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    /* 3. ÖZEL BÖLÜM ETİKETLERİ */
+    .cpr-section-card[data-section="claim"]::before {
+      content: "🔍 CLAIM (Problem & Etki)";
+    }
+    
+    .cpr-section-card[data-section="feature"]::before {
+      content: "⚙️ PROPOSITION - Özellik";
+    }
+    
+    .cpr-section-card[data-section="advantage"]::before {
+      content: "🏆 PROPOSITION - Avantaj";
+    }
+    
+    .cpr-section-card[data-section="benefit"]::before {
+      content: "❤️ PROPOSITION - Fayda";
+    }
+    
+    .cpr-section-card[data-section="recommendation"]::before {
+      content: "🎯 RECOMMENDATION";
+    }
+    
+    /* 4. LABEL STİLLERİ (Tüm bölümler için) */
+    .cpr-section-card label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #111827;
+      padding-left: 0;
+    }
+    
+    /* 5. TEXTAREA STİLLERİ (Tüm bölümler için) */
+    .cpr-section-card textarea {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 12px 40px 12px 12px;
+      font-size: 14px;
+      min-height: 80px;
+      width: 100%;
+      transition: all 0.2s;
       line-height: 1.5;
-      padding: 20px 16px;
-      min-height: 100vh;
+      resize: vertical;
+      position: relative;
     }
-
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
+    
+    .cpr-section-card textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      background: #f8fafc;
+      outline: none;
+    }
+    
+    /* 6. SES BUTONU STİLİ (Tüm bölümler için) */
+    .cpr-section-card .voice-btn {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    
+    .cpr-section-card .voice-btn:hover {
+      background: #2563eb;
+      transform: scale(1.1);
+    }
+    
+    .cpr-section-card .voice-btn.listening {
+      background: #ef4444;
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* Textarea wrapper */
+    .cpr-section-card .textarea-wrapper {
+      position: relative;
+    }
+    
+    /* 7. CLAIM ÖZEL STİLLERİ (Problem & Etki ayrımı) */
+    .claim-group {
+      border: none;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      margin-bottom: 0;
+    }
+    
+    .claim-group::before {
+      display: none;
+    }
+    
+    .claim-step {
+      position: relative;
+      padding-left: 0 !important;
+      margin-bottom: 16px;
+    }
+    
+    .claim-step::before {
+      display: none !important;
+    }
+    
+    .claim-step:last-child {
+      margin-bottom: 0;
+    }
+    
+    .claim-step.problem {
+      padding-bottom: 16px;
+      border-bottom: 1px dashed #d1d5db;
+      margin-bottom: 16px;
+    }
+    
+    /* 8. HINT BOX STİLLERİ */
+    .hint-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #4b5563;
+      border-left: 3px solid #94a3b8;
+      display: none;
+    }
+    
+    .hint-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    /* Textarea focus durumunda hint göster */
+    .cpr-section-card textarea:focus + .hint-box,
+    .cpr-section-card textarea:focus ~ .hint-box {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 9. FIELD TOOLS STİLLERİ */
+    .fieldTools {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .fieldTools .btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #4b5563;
+    }
+    
+    .fieldTools .btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    
+    /* 10. İKİ KOLON DÜZENİ (Fayda & Recommendation) */
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .two-columns > div {
+      margin-bottom: 0 !important;
+    }
+    
+    /* 11. TEK KOLON DÜZENİ (Fayda altında Recommendation) */
+    .single-column {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
+      margin-top: 20px;
     }
-
-    /* ===== HEADER ===== */
-    header {
-      text-align: center;
-      padding: 24px 0;
-      margin-bottom: 8px;
+    
+    .single-column > div {
+      margin-bottom: 0 !important;
     }
-
-    h1 {
-      margin: 0 0 12px 0;
-      font-size: 28px;
-      font-weight: 800;
+    
+    /* 12. MOBİL OPTİMİZASYON */
+    @media (max-width: 768px) {
+      .cpr-section-card {
+        padding: 14px 12px 10px 12px;
+        margin-bottom: 16px;
+        border-radius: 12px;
+      }
+      
+      .cpr-section-card::before {
+        left: 12px;
+        font-size: 10px;
+        padding: 3px 8px;
+        top: -8px;
+      }
+      
+      .cpr-section-card label {
+        font-size: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .cpr-section-card textarea {
+        min-height: 75px;
+        font-size: 15px;
+        padding: 10px 40px 10px 10px;
+      }
+      
+      .cpr-section-card .voice-btn {
+        width: 32px;
+        height: 32px;
+        right: 8px;
+        bottom: 8px;
+        font-size: 14px;
+      }
+      
+      .claim-step {
+        margin-bottom: 14px;
+      }
+      
+      .claim-step.problem {
+        padding-bottom: 14px;
+        margin-bottom: 14px;
+      }
+      
+      .two-columns,
+      .single-column {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      
+      .hint-box {
+        font-size: 13px;
+      }
+      
+      .fieldTools {
+        margin-top: 10px;
+      }
+    }
+    
+    /* =========================================== */
+    /* 📌 DİĞER CSS KODLARI (MEVCUT KORUNDU) */
+    /* =========================================== */
+    
+    /* 📱 FAZ 1: MOBİL KLAVYE ARAÇ ÇUBUĞU */
+    .mobile-toolbar {
+      display: flex !important;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+      z-index: 1000;
+      box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      gap: 8px;
+    }
+    
+    .mobile-toolbar button {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--soft);
+      font-size: 12px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 36px;
+    }
+    
+    .mobile-toolbar button.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    
+    /* 📱 FAZ 1: SESLİ GİRİŞ BUTONLARI */
+    .voice-btn.listening {
+      background: #b3261e !important;
+      color: white !important;
+      border-color: #b3261e !important;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(179, 38, 30, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(179, 38, 30, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(179, 38, 30, 0); }
+    }
+    
+    /* 📱 FAZ 4: SESLİ GİRİŞ GELİŞTİRMELERİ İÇİN YENİ STİLLER */
+    .voice-indicator {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2500;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .voice-indicator .pulse {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: voicePulse 1.2s infinite;
+    }
+    
+    @keyframes voicePulse {
+      0% { transform: scale(0.8); opacity: 0.7; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.7; }
+    }
+    
+    .voice-feedback {
+      position: absolute;
+      bottom: 60px;
+      right: 10px;
+      background: rgba(59, 130, 246, 0.9);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+    }
+    
+    /* 📱 FAZ 2: DRAFT KAYIT SİSTEMİ CSS */
+    .draft-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: fixed;
+      bottom: 70px;
+      right: 15px;
+      z-index: 999;
+    }
+    
+    .draft-indicator.saved {
+      background: rgba(19, 115, 51, 0.1);
+      border-color: rgba(19, 115, 51, 0.3);
+      color: var(--ok);
+    }
+    
+    .draft-indicator:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* 📱 FAZ 3: BAĞLANTI DURUM GÖSTERGESİ (Connectivity Manager) */
+    .offline-status {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: var(--warn);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 10px rgba(176, 96, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .offline-status.online {
+      background: var(--ok);
+      display: flex;
+    }
+    
+    .offline-status.offline {
+      background: var(--warn);
+      display: flex;
+    }
+    
+    .offline-status .icon {
+      font-size: 14px;
+    }
+    
+    /* 📱 FAZ 2: MOBİL BİLDİRİM ALANI */
+    #mobileNotificationArea {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3000;
+      width: 90%;
+      max-width: 400px;
+      pointer-events: none;
+    }
+    
+    .mobile-notification {
+      background: white;
       color: var(--text);
-      letter-spacing: -0.5px;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideDown 0.3s ease;
+      pointer-events: auto;
+      font-size: 13px;
     }
-
-    .sub {
-      margin: 0 auto;
+    
+    .mobile-notification.success {
+      border-left-color: var(--ok);
+      background: rgba(19, 115, 51, 0.05);
+    }
+    
+    .mobile-notification.warning {
+      border-left-color: var(--warn);
+      background: rgba(176, 96, 0, 0.05);
+    }
+    
+    .mobile-notification.error {
+      border-left-color: var(--bad);
+      background: rgba(179, 38, 30, 0.05);
+    }
+    
+    .mobile-notification.info {
+      border-left-color: var(--accent);
+      background: rgba(11, 95, 255, 0.05);
+    }
+    
+    .mobile-notification .icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .mobile-notification .close-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
       color: var(--muted);
-      font-size: 15px;
-      max-width: 600px;
-      line-height: 1.6;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
-
-    /* ===== PICKER-SLIDER KONTEYNIR ===== */
-    .picker-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-      margin-bottom: 20px;
+    
+    .mobile-notification .close-btn:hover {
+      background: rgba(0,0,0,0.05);
     }
-
-    @media (min-width: 768px) {
-      .picker-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 32px;
+    
+    @keyframes slideDown {
+      from { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0); 
+      }
+    }
+    
+    /* 📋 FAZ 5: PDF RAPOR BUTON STİLİ */
+    .pdf-generating {
+      opacity: 0.7;
+      cursor: wait !important;
+    }
+    
+    .pdf-generating::after {
+      content: '...';
+      animation: pdfDots 1.5s infinite;
+    }
+    
+    @keyframes pdfDots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+    
+    /* GENEL STİLLER (MEVCUT TASARIM KORUNDU) */
+    .container{
+      max-width:960px;
+      margin:0 auto 60px;
+    }
+    header{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:16px;
+    }
+    h1{
+      font-size:22px;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      margin:0;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    h1 span.icon{
+      font-size:22px;
+    }
+    .sub{
+      font-size:13px;
+      color:var(--muted);
+    }
+    .tagline{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .badgeRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+    }
+    .pill{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:var(--soft);
+      border:1px solid var(--border);
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .pill span{
+      font-size:14px;
+    }
+    main{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .card{
+      background:white;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      padding:14px 14px 16px;
+    }
+    .cardHeader{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+      align-items:flex-start;
+    }
+    .cardTitle{
+      font-weight:600;
+      font-size:14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .cardTitle span.icon{
+      font-size:16px;
+    }
+    .cardMeta{
+      font-size:11px;
+      color:var(--muted);
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:4px;
+    }
+    .miniLabel{
+      font-size:11px;
+    }
+    .counters{
+      display:flex;
+      gap:4px;
+    }
+    .counter{
+      padding:3px 6px;
+      border-radius:999px;
+      background:var(--soft);
+      border:1px solid var(--border);
+      font-size:11px;
+    }
+    .counter span{
+      font-weight:600;
+    }
+    .sectionTitle{
+      font-size:13px;
+      font-weight:600;
+      margin-bottom:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .sectionTitle span.icon{font-size:14px}
+    .small{
+      font-size:12px;
+      color:var(--muted);
+    }
+    label{
+      font-size:12px;
+      font-weight:500;
+      margin-bottom:4px;
+      display:block;
+    }
+    textarea{
+      width:100%;
+      min-height:90px;
+      padding:10px 38px 10px 10px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      resize:vertical;
+      font-family:var(--sans);
+      line-height:1.4;
+      font-size:13px;
+      transition:border .15s, box-shadow .15s, background .15s;
+      background:white;
+    }
+    textarea:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(11,95,255,0.1);
+      background:#f8f9ff;
+    }
+    textarea[disabled]{
+      background:#f5f5f5;
+      color:#999;
+      cursor:not-allowed;
+    }
+    input[type="text"]{
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      font-size:13px;
+      font-family:var(--sans);
+    }
+    input[type="text"]:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(11,95,255,0.1);
+    }
+    select{
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      font-size:13px;
+      font-family:var(--sans);
+      background:white;
+    }
+    select:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(11,95,255,0.1);
+    }
+    .two{
+      display:grid;
+      grid-template-columns:1.2fr 1.1fr;
+      gap:10px;
+      margin-top:6px;
+    }
+    .two > div{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .hint{
+      font-size:11px;
+      color:var(--muted);
+      margin:0 0 4px;
+    }
+    .hint b{
+      color:#000;
+    }
+    .hint-box{
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+      border-radius:8px;
+      padding:6px 8px;
+      background:#f9fafb;
+      border:1px dashed #d0d7de;
+      display:none;
+    }
+    .hint-box.show{
+      display:block;
+    }
+    .btnRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+    }
+    .btn{
+      border-radius:999px;
+      border:none;
+      padding:6px 10px;
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+      background:var(--accent);
+      color:white;
+      box-shadow:0 2px 8px rgba(11,95,255,0.28);
+      min-height:32px;
+    }
+    .btn.small{
+      padding:4px 8px;
+      font-size:11px;
+      min-height:26px;
+    }
+    .btn.ghost{
+      background:white;
+      color:#111;
+      border:1px solid var(--border);
+      box-shadow:none;
+    }
+    .btn.ghost:hover{
+      background:#f3f4ff;
+      border-color:#c7d2fe;
+    }
+    .btn[disabled],
+    .btn:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+    .btn.primary{
+      background:#0b5fff;
+      color:white;
+      border:1px solid #0b5fff;
+    }
+    .btn.primary:hover{
+      background:#0847c0;
+      border-color:#0847c0;
+    }
+    .btn.success{
+      background:#137333;
+      border-color:#137333;
+    }
+    .btn.success:hover{
+      background:#0f5a28;
+    }
+    .btn.iconOnly{
+      padding:6px;
+      width:30px;
+      justify-content:center;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      font-size:11px;
+      padding:3px 8px;
+      background:var(--soft);
+      border:1px solid var(--border);
+      gap:4px;
+    }
+    .badge.ok{
+      background:#e8f5e9;
+      border-color:#c8e6c9;
+      color:#1b5e20;
+    }
+    .badge.warn{
+      background:#fff8e1;
+      border-color:#ffe0b2;
+      color:#e65100;
+    }
+    .badge.bad{
+      background:#ffebee;
+      border-color:#ffcdd2;
+      color:#b71c1c;
+    }
+    .badge span.icon{
+      font-size:13px;
+    }
+    .presetRow{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:8px;
+    }
+    .presetRowInner{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .presetCard{
+      border-radius:999px;
+      border:1px solid var(--border);
+      padding:4px 10px;
+      font-size:11px;
+      background:#f9fafb;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .presetCard span.icon{
+      font-size:14px;
+    }
+    .activePreset{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+    .kwWrap{
+      display:flex;
+      gap:6px;
+      align-items:flex-start;
+      margin-top:4px;
+    }
+    .kwWrap textarea{
+      min-height:70px;
+    }
+    .statusBar{
+      margin-top:8px;
+      padding:6px 8px;
+      border-radius:10px;
+      background:#f9fafb;
+      border:1px dashed #d0d7de;
+      font-size:11px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .statusLeft{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:center;
+    }
+    .statusRight{
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .statusRight span{
+      font-weight:600;
+      color:#000;
+    }
+    .miniTag{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:#f3f4ff;
+      border:1px solid #c7d2fe;
+    }
+    .miniTag span.icon{
+      font-size:12px;
+    }
+    .lock{
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#f9fafb;
+    }
+    .lock.badge-locked{
+      background:#ffebee;
+      border-color:#ffcdd2;
+      color:#b71c1c;
+    }
+    .lock.badge-open{
+      background:#e8f5e9;
+      border-color:#c8e6c9;
+      color:#1b5e20;
+    }
+    .lock.badge-wait{
+      background:#fff8e1;
+      border-color:#ffe0b2;
+      color:#e65100;
+    }
+    .cpanel{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+    }
+    .cpanel .badge{
+      cursor:default;
+    }
+    .cpanel .badge strong{
+      font-weight:600;
+    }
+    .sumRow{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .sumRow textarea{
+      min-height:120px;
+    }
+    .sumRow .small{
+      margin-top:2px;
+    }
+    .acc{
+      border-radius:var(--radius);
+      border:1px solid rgba(0,0,0,0.05);
+      background:#fdfdfd;
+      margin:0 0 6px;
+      padding:0;
+    }
+    .acc[open]{
+      background:#f8f9ff;
+      border-color:#c7d2fe;
+      box-shadow:0 8px 18px rgba(15,23,42,0.08);
+    }
+    .acc summary{
+      list-style:none;
+      padding:10px 12px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .acc summary::-webkit-details-marker{display:none}
+    .accTitle{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .accTitle b{
+      font-size:13px;
+    }
+    .accTitle span{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .accMeta{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:4px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .accMeta .tag{
+      padding:2px 6px;
+      border-radius:999px;
+      background:#f3f4ff;
+      border:1px solid #c7d2fe;
+      font-size:11px;
+    }
+    .accBody{
+      border-top:1px solid rgba(0,0,0,0.04);
+      padding:8px 12px 10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .acc[open] summary{
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      background:linear-gradient(to right,#eef2ff,#f9fafb);
+    }
+    .acc summary .arrow{
+      font-size:16px;
+      transition:transform 0.2s;
+    }
+    .acc[open] summary .arrow{
+      transform:rotate(90deg);
+    }
+    .fieldRow{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      margin-top:4px;
+    }
+    .fieldTools{
+      display:flex;
+      flex-wrap:wrap;
+      gap:4px;
+      justify-content:flex-end;
+      margin-top:4px;
+    }
+    .fieldTools .btn{
+      font-size:10px;
+      padding:3px 7px;
+      min-height:0;
+    }
+    .fieldTools .btn span.icon{
+      font-size:12px;
+    }
+    .fieldGroupTitle{
+      font-size:12px;
+      font-weight:600;
+      margin-top:2px;
+    }
+    .kpiRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .kpiRow span strong{
+      color:#000;
+    }
+    .styleGrid{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      margin-top:6px;
+    }
+    .styleCard{
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fdfdfd;
+      padding:8px 10px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .styleHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+    }
+    .styleTitle{
+      font-size:12px;
+      font-weight:600;
+    }
+    .styleBadge{
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#f9fafb;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .styleBadge span.icon{font-size:12px}
+    .styleBody{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .styleBody ul{
+      margin:4px 0 0;
+      padding-left:16px;
+    }
+    .styleBody li{
+      margin-bottom:2px;
+    }
+    .styleFooter{
+      margin-top:4px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+    }
+    .styleFooter .badge{
+      font-size:10px;
+    }
+    .styleFooter .btn{
+      font-size:10px;
+      padding:3px 7px;
+    }
+    .style-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#f3f4ff;
+      margin-bottom:4px;
+    }
+    .style-badge.explorer{
+      background:#e0f2fe;
+      border-color:#bae6fd;
+    }
+    .style-badge.reflector{
+      background:#f3e8ff;
+      border-color:#e9d5ff;
+    }
+    .style-badge.theorist{
+      background:#eef2ff;
+      border-color:#e0e7ff;
+    }
+    .style-badge.pragmatist{
+      background:#ecfdf3;
+      border-color:#bbf7d0;
+    }
+    .style-badge span.icon{
+      font-size:13px;
+    }
+    .styled-cpr-area{
+      min-height:110px;
+    }
+    .footerNote{
+      font-size:11px;
+      color:var(--muted);
+      margin:0;
+      margin-top:6px;
+    }
+    .footerNote b{
+      color:#000;
+    }
+    .highlight{
+      background:yellow;
+    }
+    .autoScore{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:3px 6px;
+      border-radius:999px;
+      background:#f3f4ff;
+      border:1px solid #c7d2fe;
+    }
+    .badge.muted{
+      background:#f3f4ff;
+      border-color:#e5e7eb;
+      color:#4b5563;
+    }
+    .badge.muted span.icon{
+      color:#9ca3af;
+    }
+    .notice{
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .notice b{
+      color:#000;
+    }
+    .badge.lite{
+      background:#f9fafb;
+      border-color:#e5e7eb;
+    }
+    .badge.lite strong{
+      font-weight:600;
+    }
+    .styleFeedback{
+      font-size:11px;
+      color:#4b5563;
+      background:#f9fafb;
+      border-radius:10px;
+      border:1px dashed #d1d5db;
+      padding:6px 8px;
+      margin-top:4px;
+    }
+    .styleFeedback b{
+      color:#111827;
+    }
+    .smallNote{
+      font-size:10px;
+      color:#9ca3af;
+      margin-top:2px;
+    }
+    .badge.soft{
+      background:#f9fafb;
+      border-color:#e5e7eb;
+    }
+    .badge.soft span.icon{
+      color:#9ca3af;
+    }
+    .badge.soft strong{
+      color:#111827;
+    }
+    .computedScore{
+      font-size:11px;
+      color:#111827;
+      background:#eff6ff;
+      border-radius:999px;
+      padding:2px 6px;
+      border:1px solid #bfdbfe;
+    }
+    .computedScore span{
+      font-weight:600;
+    }
+    .small-badge{
+      font-size:10px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:#f3f4ff;
+      border:1px solid #e5e7eb;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .small-badge span.icon{
+      font-size:11px;
+    }
+    .metaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+      font-size:11px;
+      color:#6b7280;
+    }
+    .metaRow span strong{
+      color:#111827;
+    }
+    .pill.primary{
+      background:#eff6ff;
+      border-color:#bfdbfe;
+      color:#1d4ed8;
+    }
+    .pill.primary span.icon{
+      color:#3b82f6;
+    }
+    .pill.soft{
+      background:#f9fafb;
+      border-color:#e5e7eb;
+      color:#4b5563;
+    }
+    .pill.soft span.icon{
+      color:#9ca3af;
+    }
+    .pill.ok{
+      background:#ecfdf3;
+      border-color:#bbf7d0;
+      color:#166534;
+    }
+    .pill.ok span.icon{
+      color:#22c55e;
+    }
+    .pill.warn{
+      background:#fffbeb;
+      border-color:#fed7aa;
+      color:#92400e;
+    }
+    .pill.warn span.icon{
+      color:#f97316;
+    }
+    .pill.bad{
+      background:#fef2f2;
+      border-color:#fecaca;
+      color:#b91c1c;
+    }
+    .pill.bad span.icon{
+      color:#ef4444;
+    }
+    .lock span.icon{
+      font-size:12px;
+    }
+    .mobileOnly{
+      display:none;
+    }
+    @media (max-width:768px){
+      .mobileOnly{
+        display:inline-flex;
+      }
+    }
+    .kwAdd{
+      white-space:nowrap;
+    }
+    .listening-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #111827;
+      background: #eff6ff;
+      border-radius: 999px;
+      padding: 2px 8px;
+      border: 1px solid #bfdbfe;
+      margin-left: 6px;
+    }
+    
+    .listening-indicator .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      animation: pulse-dot 1.2s infinite;
+    }
+    
+    @keyframes pulse-dot {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* ✅ CHIP PICKER (MOBİL DOSTU ÇOKLU SEÇİM) */
+    .chipDetails{ margin-top:4px; }
+    .chipDetails summary::-webkit-details-marker{ display:none; }
+    .chipTrigger{
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:white;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chipTrigger:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 1px rgba(11,95,255,0.1); }
+    .chipTriggerText{ font-size:13px; color:#111; }
+    .chipPanel{ padding:10px 2px 4px; }
+    .chipGrid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chipOption{
+      border:1px solid var(--border);
+      background:var(--soft);
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      cursor:pointer;
+      line-height:1.1;
+      text-align:left;
+      transition:background .15s, border-color .15s, transform .05s;
+    }
+    .chipOption:active{ transform:scale(0.98); }
+    .chipOption.active{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:white;
+    }
+    .chipActions{
+      display:flex;
+      justify-content:flex-end;
+      gap:6px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+    .chipSelected{
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed #d0d7de;
+    }
+    .pillWrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:6px;
+    }
+    .pillRem{
+      cursor:pointer;
+      border:none;
+    }
+    .pillRem .x{
+      font-weight:700;
+      opacity:0.8;
+      margin-left:6px;
+    }
+    @media (max-width:768px){
+      .chipDetails[open] .chipPanel{
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:1200;
+        background:white;
+        border-top:1px solid var(--border);
+        border-radius:18px 18px 0 0;
+        box-shadow:0 -12px 30px rgba(0,0,0,0.12);
+        padding:12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+        max-height:70vh;
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
       }
     }
 
-    .picker-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      background: var(--card-bg);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease;
+    /* --- ÜRÜN ODAK & HAZIRLIK (Chip / Pill Seçim) --- */
+    .pill.clickable{cursor:pointer; user-select:none;}
+    .pill.clickable:hover{background:#eff6ff; border-color:#bfdbfe;}
+    .pill.clickable.active{background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8;}
+    .pill.clickable.selected{background:#ecfdf3; border-color:#bbf7d0; color:#166534;}
+    .pill.clickable.selected:hover{background:#dcfce7; border-color:#86efac;}
+    .pill.removable{gap:6px;}
+    .pill .x{font-weight:700; opacity:.7;}
+    .pill .x:hover{opacity:1;}
+  
+    /* Fayda seçim limiti (pill) */
+    .pill.disabled{opacity:0.45;}
+
+    /* Claim – Problem & Etki görsel bağlayıcı */
+    .claim-group{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background:#fafbff;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      position:relative;
+    }
+    .claim-step{
+      position:relative;
+      padding-left:34px;
+    }
+    .claim-step::before{
+      content: attr(data-step);
+      position:absolute;
+      left:0;
+      top:0;
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:var(--accent);
+      color:white;
+      font-size:12px;
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    .picker-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .picker-card.me {
-      border-top: 4px solid var(--me-color);
-    }
-
-    .picker-card.other {
-      border-top: 4px solid var(--other-color);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--soft);
-    }
-
-    .card-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .card-title.me {
-      color: var(--me-color);
-    }
-
-    .card-title.other {
-      color: var(--other-color);
-    }
-
-    .progress {
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .progress span {
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    /* ===== PICKER STİLLERİ ===== */
-    .picker-group {
-      margin-bottom: 24px;
-    }
-
-    .picker-label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .behavior-picker {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 16px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--soft);
-      color: var(--text);
-      font-weight: 600;
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      background-size: 16px;
-    }
-
-    .behavior-picker:focus {
-      outline: none;
-      border-color: var(--me-color);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .picker-card.other .behavior-picker:focus {
-      border-color: var(--other-color);
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
-
-    /* ===== SLIDER STİLLERİ ===== */
-    .slider-group {
-      margin-bottom: 32px;
-    }
-
-    .slider-container {
-      position: relative;
-      margin: 20px 0 12px;
-    }
-
-    /* Gradient track */
-    .slider-track {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 8px;
-      background: linear-gradient(to right, 
-        var(--color-1), var(--color-3), var(--color-5), 
-        var(--color-7), var(--color-9));
-      border-radius: 4px;
-      transform: translateY(-50%);
-      z-index: 1;
-    }
-
-    /* Custom slider */
-    .behavior-slider {
-      width: 100%;
-      height: 40px;
-      margin: 0;
-      position: relative;
-      z-index: 2;
-      background: transparent;
-      appearance: none;
-      cursor: pointer;
-    }
-
-    .behavior-slider::-webkit-slider-thumb {
-      appearance: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: white;
-      border: 3px solid var(--me-color);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .behavior-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .picker-card.other .behavior-slider::-webkit-slider-thumb {
-      border-color: var(--other-color);
-    }
-
-    .behavior-slider::-moz-range-thumb {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: white;
-      border: 3px solid var(--me-color);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-    }
-
-    /* Slider değer göstergesi */
-    .slider-value {
-      text-align: center;
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--text);
-      margin: 8px 0 4px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .slider-labels {
-      display: flex;
-      justify-content: space-between;
+    /* YENİ: Uyumlu Davranış Kriterleri için stiller */
+    .behavior-details {
       margin-top: 8px;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
     }
-
-    .endpoint-labels {
+    
+    .behavior-details summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
       display: flex;
       justify-content: space-between;
-      margin-top: 4px;
-      font-size: 13px;
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    /* ===== SAVE BUTTON ===== */
-    .save-btn {
-      width: 100%;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 700;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
       align-items: center;
-      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: #111827;
+    }
+    
+    .behavior-details[open] summary {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: 1px dashed #e5e7eb;
+    }
+    
+    .behavior-details summary::after {
+      content: "▼";
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+    
+    .behavior-details[open] summary::after {
+      transform: rotate(180deg);
+    }
+    
+    .behavior-panel {
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      background: white;
+    }
+    
+    .behavior-pills {
+      display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       margin-top: 8px;
     }
-
-    .save-btn.me {
-      background: var(--me-color);
-      color: white;
-    }
-
-    .save-btn.other {
-      background: var(--other-color);
-      color: white;
-    }
-
-    .save-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .save-btn:active {
-      transform: translateY(0);
-    }
-
-    .save-btn.saved {
-      background: #10b981;
-    }
-
-    /* ===== GRAFİKLER ===== */
-    .charts-section {
-      margin-top: 16px;
-    }
-
-    .charts-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    @media (min-width: 768px) {
-      .charts-container {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .chart-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-      min-height: 320px;
-    }
-
-    .chart-title {
-      margin: 0 0 16px 0;
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text);
-      text-align: center;
-    }
-
-    .chart-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 250px;
-      color: var(--muted);
-      font-size: 14px;
-      text-align: center;
-      padding: 20px;
-    }
-
-    /* ===== KARŞILAŞTIRMA ve ÖNERİLER ===== */
-    .results-section {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-top: 16px;
-    }
-
-    @media (min-width: 992px) {
-      .results-section {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .results-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-    }
-
-    .results-card h3 {
-      margin: 0 0 20px 0;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text);
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--soft);
-    }
-
-    .comparison-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .comparison-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--soft);
-    }
-
-    .comparison-item:last-child {
-      border-bottom: none;
-    }
-
-    .item-name {
-      font-weight: 700;
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .item-values {
-      display: flex;
-      gap: 12px;
-      font-weight: 800;
-      font-size: 14px;
-    }
-
-    .me-value {
-      color: var(--me-color);
-    }
-
-    .other-value {
-      color: var(--other-color);
-    }
-
-    .diff-value {
-      background: #10b981;
-      color: white;
-      padding: 4px 10px;
+    
+    .behavior-pill {
+      padding: 6px 10px;
       border-radius: 20px;
-      font-size: 13px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
     }
-
-    .recommendation-item {
-      padding: 16px;
-      background: var(--soft);
-      border-radius: var(--radius);
-      margin-bottom: 12px;
-      border-left: 4px solid var(--me-color);
+    
+    .behavior-pill.selected {
+      background: #3b82f6;
+      color: white;
+      border-color: #2563eb;
     }
-
-    .recommendation-item h4 {
-      margin: 0 0 8px 0;
-      font-size: 15px;
-      color: var(--text);
+    
+    .selected-behaviors {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #d1d5db;
     }
-
-    .recommendation-item p {
-      margin: 0;
+    
+    .selected-behaviors-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    
+    .selected-behaviors-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 20px;
+    }
+    
+    .selected-behavior-pill {
+      padding: 4px 8px;
+      border-radius: 20px;
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .selected-behavior-pill .remove {
+      cursor: pointer;
+      font-weight: bold;
       font-size: 14px;
-      color: var(--muted);
-      line-height: 1.5;
+      opacity: 0.7;
+    }
+    
+    .selected-behavior-pill .remove:hover {
+      opacity: 1;
+    }
+    
+    /* YENİ: Öğrenme Stili Pilleri */
+    .learning-style-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .learning-style-pill {
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .learning-style-pill.selected {
+      background: #10b981;
+      color: white;
+      border-color: #059669;
+    }
+    
+    .learning-style-pill.activist.selected {
+      background: #f97316;
+      border-color: #ea580c;
+    }
+    
+    .learning-style-pill.reflector.selected {
+      background: #8b5cf6;
+      border-color: #7c3aed;
+    }
+    
+    .learning-style-pill.theorist.selected {
+      background: #0ea5e9;
+      border-color: #0284c7;
+    }
+    
+    .learning-style-pill.pragmatist.selected {
+      background: #10b981;
+      border-color: #059669;
     }
 
-    /* ===== FOOTER ===== */
-    footer {
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    /* ===== UTILITIES ===== */
-    .hidden {
-      display: none !important;
-    }
-
-    .completed .card-title::after {
-      content: " ✓";
-      color: #10b981;
-    }
-  </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</style>
 </head>
-
 <body>
-  <div class="wrap">
-    <header>
-      <h1>Davranış Karşılaştırma Testi</h1>
-      <p class="sub">Davranışınızı seçin, şiddetini kaydırıcı ile belirleyin. Hem kendiniz hem karşınızdaki için değerlendirme yapın.</p>
-    </header>
-
-    <!-- PICKER-SLIDER BÖLÜMÜ -->
-    <div class="picker-container">
-      <!-- BENİM DAVRANIŞLARIM -->
-      <div class="picker-card me" id="meCard">
-        <div class="card-header">
-          <h2 class="card-title me">Benim Davranışlarım</h2>
-          <div class="progress">Tamamlanan: <span id="meCount">0</span>/8</div>
-        </div>
-
-        <div class="picker-group">
-          <label class="picker-label">Davranış Seçin</label>
-          <select class="behavior-picker" id="mePicker">
-            <option value="">Bir davranış seçin</option>
-            <!-- JS ile doldurulacak -->
-          </select>
-        </div>
-
-        <div class="slider-group">
-          <div class="slider-container">
-            <div class="slider-track"></div>
-            <input type="range" min="1" max="9" value="5" 
-                   class="behavior-slider" id="meSlider">
-          </div>
-          
-          <div class="slider-value" id="meValue">5</div>
-          
-          <div class="slider-labels">
-            <span>1</span><span>2</span><span>3</span><span>4</span>
-            <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
-          </div>
-          
-          <div class="endpoint-labels">
-            <span id="meLowLabel">Az</span>
-            <span id="meHighLabel">Çok</span>
-          </div>
-        </div>
-
-        <button class="save-btn me" id="meSaveBtn">
-          <span>Kaydet</span>
-        </button>
-      </div>
-
-      <!-- ONUN DAVRANIŞLARI -->
-      <div class="picker-card other" id="otherCard">
-        <div class="card-header">
-          <h2 class="card-title other">Onun Davranışları</h2>
-          <div class="progress">Tamamlanan: <span id="otherCount">0</span>/8</div>
-        </div>
-
-        <div class="picker-group">
-          <label class="picker-label">Davranış Seçin</label>
-          <select class="behavior-picker" id="otherPicker">
-            <option value="">Bir davranış seçin</option>
-            <!-- JS ile doldurulacak -->
-          </select>
-        </div>
-
-        <div class="slider-group">
-          <div class="slider-container">
-            <div class="slider-track"></div>
-            <input type="range" min="1" max="9" value="5" 
-                   class="behavior-slider" id="otherSlider">
-          </div>
-          
-          <div class="slider-value" id="otherValue">5</div>
-          
-          <div class="slider-labels">
-            <span>1</span><span>2</span><span>3</span><span>4</span>
-            <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
-          </div>
-          
-          <div class="endpoint-labels">
-            <span id="otherLowLabel">Az</span>
-            <span id="otherHighLabel">Çok</span>
-          </div>
-        </div>
-
-        <button class="save-btn other" id="otherSaveBtn">
-          <span>Kaydet</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- GRAFİKLER -->
-    <section class="charts-section">
-      <div class="charts-container">
-        <div class="chart-card">
-          <h3 class="chart-title">Benim Davranış Profilim</h3>
-          <div class="chart-placeholder" id="meChartPlaceholder">
-            Tüm davranışlarınızı kaydettikten sonra grafik burada görünecek.
-          </div>
-          <canvas id="meChart" class="hidden" height="260"></canvas>
-        </div>
-        
-        <div class="chart-card">
-          <h3 class="chart-title">Onun Davranış Profili</h3>
-          <div class="chart-placeholder" id="otherChartPlaceholder">
-            Tüm davranışları kaydettikten sonra grafik burada görünecek.
-          </div>
-          <canvas id="otherChart" class="hidden" height="260"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <!-- KARŞILAŞTIRMA ve ÖNERİLER -->
-    <section class="results-section">
-      <div class="results-card">
-        <h3>Karşılaştırma Sonuçları</h3>
-        <div class="comparison-placeholder" id="comparisonPlaceholder">
-          Her iki tarafın da tüm davranışları kaydedilince sonuçlar burada görünecek.
-        </div>
-        <ul class="comparison-list hidden" id="comparisonList"></ul>
-      </div>
-      
-      <div class="results-card">
-        <h3>Uyumlanma Önerileri</h3>
-        <div class="recommendation-placeholder" id="recommendationPlaceholder">
-          Farklılıklarınız analiz edilince öneriler burada görünecek.
-        </div>
-        <div class="recommendation-list hidden" id="recommendationList"></div>
-      </div>
-    </section>
-
-    <footer>
-      <p>Davranış Karşılaştırma Testi • Picker+Slider sistemi • Mobil optimizasyon</p>
-    </footer>
+  <!-- 📱 FAZ 3: GELİŞTİRİLMİŞ OFFLINE DURUM GÖSTERGESİ -->
+  <div class="offline-status" id="offlineStatus">
+    <span class="icon">📡</span>
+    <span id="connectivityText">Çevrimdışı</span>
   </div>
 
-  <script>
-    // ===== VERİ YAPILARI =====
-    const behaviors = [
-      "Konuşma Hızı",
-      "Sesin Hacmi", 
-      "Mimikler",
-      "Göz Teması",
-      "Ellerin Kullanımı",
-      "Duruş",
-      "İçerik",
-      "Kelime Sayısı"
-    ];
+  <!-- 📱 FAZ 1: MOBİL TOOLBAR -->
+  <div class="mobile-toolbar" id="mobileToolbar">
+    <button data-action="claim" title="Claim şablonu">📝 Claim</button>
+    <button data-action="feature" title="Feature şablonu">⚙️ Feature</button>
+    <button data-action="advantage" title="Advantage şablonu">🚀 Advantage</button>
+    <button data-action="benefit" title="Benefit şablonu">✅ Benefit</button>
+    <button data-action="recommendation" title="Recommendation şablonu">💡 Recommendation</button>
+    <button data-action="copy" title="Kopyala">📋 Kopyala</button>
+    <button data-action="paste" title="Yapıştır">📎 Yapıştır</button>
+    <button data-action="clear" title="Temizle">🗑️ Temizle</button>
+  </div>
 
-    const endpoints = {
-      "Konuşma Hızı": { low: "Yavaş", high: "Hızlı" },
-      "Sesin Harcmi": { low: "Zayıf", high: "Güçlü" },
-      "Mimikler": { low: "Kontrollü", high: "Hareketli" },
-      "Göz Teması": { low: "Dolaylı", high: "Doğrudan" },
-      "Ellerin Kullanımı": { low: "Az", high: "Çok" },
-      "Duruş": { low: "Çekingen", high: "Atak" },
-      "İçerik": { low: "Hikayeler", high: "Gerçekler" },
-      "Kelime Sayısı": { low: "Az", high: "Çok" }
-    };
+  <!-- 📱 FAZ 2: DRAFT KAYIT GÖSTERGESİ -->
+  <div class="draft-indicator" id="draftIndicator" title="Draft durumu">
+    💾 Draft
+  </div>
 
-    const recommendations = {
-      "Konuşma Hızı": {
-        lowHigh: "Karşı taraf daha hızlı konuşuyor: Aktif duraklamalar yapın ve 'Anlatabildim mi?' gibi onay soruları kullanın.",
-        highLow: "Siz daha hızlı konuşuyorsunuz: Cümleler arasında 1-2 saniye duraklayın, önemli noktaları tekrarlayın."
-      },
-      "Sesin Harcmi": {
-        lowHigh: "Karşı tarafın sesi daha güçlü: Dik duruş ve diyafram nefesi ile sesinizi güçlendirin.",
-        highLow: "Sizin sesiniz daha güçlü: Sesinizi kademeli olarak alçaltın, yumuşatıcı ifadeler kullanın."
-      },
-      // ... diğer davranışlar için benzer
-    };
-
-    // ===== STATE =====
-    const mySelections = {};
-    const otherSelections = {};
+  <div class="container">
+    <header>
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div>
+          <h1>
+            <span class="icon">🧠</span>
+            FAST CPR KOÇU - GÜVENLİ
+          </h1>
+          <div class="sub">© 2024 - Tüm hakları saklıdır. İzinsiz kopyalanamaz.</div>
+        </div>
+        <!-- 📄 YENİ TÜM RAPOR PDF BUTONU -->
+        <div class="pill" style="cursor: pointer; background: #3b82f6; color: white; margin-left: auto; transition: all 0.2s; padding: 8px 12px;" id="fullReportPDF" title="Tüm çalışmayı PDF olarak indir">
+          <span class="icon">📄</span>
+          <span>PDF</span>
+        </div>
+      </div>
+      <div class="badgeRow">
+        <div class="pill soft">
+          <span class="icon">🔒</span>
+          <span>Güvenli Sürüm v3.2024</span>
+        </div>
+        <div class="pill ok">
+          <span class="icon">✅</span>
+          <span>Temel CPR ≥ 13 ise stil CPR'ları aktifleşir</span>
+        </div>
+      </div>
+    </header>
     
-    let chartMeInstance = null;
-    let chartOtherInstance = null;
-
-    // ===== DOM ELEMENTS =====
-    const mePicker = document.getElementById('mePicker');
-    const otherPicker = document.getElementById('otherPicker');
-    const meSlider = document.getElementById('meSlider');
-    const otherSlider = document.getElementById('otherSlider');
-    const meValue = document.getElementById('meValue');
-    const otherValue = document.getElementById('otherValue');
-    const meSaveBtn = document.getElementById('meSaveBtn');
-    const otherSaveBtn = document.getElementById('otherSaveBtn');
-    const meCount = document.getElementById('meCount');
-    const otherCount = document.getElementById('otherCount');
-    const meCard = document.getElementById('meCard');
-    const otherCard = document.getElementById('otherCard');
-
-    // ===== PICKER DOLDURMA =====
-    function populatePickers() {
-      behaviors.forEach(behavior => {
-        const option1 = document.createElement('option');
-        option1.value = behavior;
-        option1.textContent = behavior;
-        mePicker.appendChild(option1.cloneNode(true));
+    <main>
+      <!-- 1. SOSYAL STİL VE ÖĞRENME STİLİ TANIMLAMA KARTI (AKORDEON - AÇIK) -->
+      <details class="acc" data-acc="preparation" id="acc_preparation" open>
+        <summary>
+          <div class="accTitle">
+            <b><span class="arrow">▶</span> Sosyal Stil ve Öğrenme Stili Tanımlama</b>
+            <span>Bu alanda kaydettiğiniz bilgileri zihinsel hazırlık içindir. Zorunlu değildir</span>
+          </div>
+          <div class="accMeta">
+            <span class="tag">🎯 Hazırlık</span>
+          </div>
+        </summary>
         
-        const option2 = option1.cloneNode(true);
-        otherPicker.appendChild(option2);
-      });
-    }
+        <div class="accBody">
+          <div class="fieldRow">
+            <label for="promoContext">Doktor / Eczacının Sosyal Stili <span class="small">(Lütfen <a href="https://iskendereser.github.io/S4Survey/" target="_blank" rel="noopener">FAST S4 Survey</a> kullanınız)</span></label>
+            <input id="promoContext" type="text" placeholder="Örn: Driving / Analytical / Expressive / Amiable (veya kendi notunuz)" />
+          </div>
 
-    // ===== SLIDER UPDATE =====
-    function updateSliderValue(slider, valueDisplay) {
-      const value = slider.value;
-      valueDisplay.textContent = value;
+          <div class="fieldRow">
+            <label>Uyumlu Davranış Kriterleri</label>
+            <details class="behavior-details" id="behaviorDetails">
+              <summary>
+                <span>Uyumlu Davranış Kriterleri Seçin</span>
+              </summary>
+              <div class="behavior-panel">
+                <div class="behavior-pills" id="behaviorPills">
+                  <!-- Davranış pilleri JavaScript ile eklenecek -->
+                </div>
+                <div class="selected-behaviors">
+                  <div class="selected-behaviors-title">Seçilen Davranışlar:</div>
+                  <div class="selected-behaviors-list" id="selectedBehaviorsList">
+                    <!-- Seçilen davranışlar buraya eklenecek -->
+                  </div>
+                </div>
+              </div>
+            </details>
+            <div class="small">Birden fazla seçim yapabilirsiniz. Seçim sınırı yoktur.</div>
+          </div>
+
+          <div class="fieldRow">
+            <label for="learningStyle">Öğrenme stilini belirleyiniz <span class="small">(Lütfen <a href="https://iskendereser.github.io/LSA/" target="_blank" rel="noopener">FAST LSA</a> kullanınız)</span></label>
+            <div class="learning-style-pills" id="learningStylePills">
+              <!-- Öğrenme stili pilleri JavaScript ile eklenecek -->
+            </div>
+            <input type="hidden" id="learningStyle" value="" />
+          </div>
+
+          <!-- SMART CPR hedefi buradan kaldırıldı -->
+        </div>
+      </details>
       
-      // Slider thumb rengini değiştir (1-9 arası gradient)
-      const color = getColorForValue(value);
-      slider.style.setProperty('--thumb-color', color);
-    }
+      <!-- 2. ÜRÜN-RAKİP-ÜSTÜNLÜKLER-HEDEF KARTI (AKORDEON - KAPALI) -->
+      <details class="acc" data-acc="productprep" id="acc_productprep">
+        <summary>
+          <div class="accTitle">
+            <b><span class="arrow">▶</span> Ürün-Rakip-Üstünlükler-Hedef</b>
+            <span>Ürün → Rakip → Üstün Yön → Sunacağınız Fayda. Bu kart, aşağıdaki CPR yazımında "fener" gibi referans olsun diye vardır.</span>
+          </div>
+          <div class="accMeta">
+            <span class="tag">🧭 Hazırlık</span>
+            <div class="counters">
+              <div class="counter">
+                🧭 <span>Hazırlık</span>
+              </div>
+              <div class="counter">
+                🧠 <span>Hatırlatıcı</span>
+              </div>
+            </div>
+          </div>
+        </summary>
+        
+        <div class="accBody">
+          <div class="presetRow">
+            <div class="presetRowInner">
+              <div class="presetCard">
+                <span class="icon">💊</span>
+                <span>Ürün seç / ekle</span>
+              </div>
+              <div class="presetCard">
+                <span class="icon">🏁</span>
+                <span>Rakip seç / ekle</span>
+              </div>
+              <div class="presetCard">
+                <span class="icon">⭐</span>
+                <span>Üstün yön + fayda seç</span>
+              </div>
+            </div>
+            <div class="activePreset" id="activeProductLabel" aria-live="polite">Seçilen ürün: —</div>
+          </div>
 
-    function getColorForValue(value) {
-      const colors = [
-        '#f3f4f6', '#dbeafe', '#bfdbfe', '#93c5fd', 
-        '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af'
-      ];
-      return colors[value - 1] || colors[4];
-    }
+          <!-- 1) ÜRÜN -->
+          <div class="fieldRow">
+            <label for="productNameInput">Ürün (ilk kullanımda elle yazın)</label>
+            <div class="kwWrap">
+              <input id="productNameInput" type="text" placeholder="Örn: Zoramisin" />
+              <button class="btn ghost small kwAdd" id="addProductBtn" type="button">Ekle</button>
+            </div>
+            <div class="notice">İpucu: Ürün adları otomatik biçimlendirilir (ilk harf büyük). Daha sonra pill üzerinden tek dokunuşla seçebilirsiniz.</div>
+            <div class="badgeRow" id="productPills" style="margin-top:8px;"></div>
+          </div>
 
-    // ===== ENDPOINT LABEL UPDATE =====
-    function updateEndpointLabels(picker, lowLabel, highLabel) {
-      const behavior = picker.value;
-      if (endpoints[behavior]) {
-        lowLabel.textContent = endpoints[behavior].low;
-        highLabel.textContent = endpoints[behavior].high;
-      } else {
-        lowLabel.textContent = "Az";
-        highLabel.textContent = "Çok";
+          <!-- 2) RAKİP -->
+          <div class="fieldRow" style="margin-top:10px;">
+            <label for="competitorNameInput">Rakip (elle yazılır, kayıt olur)</label>
+            <div class="kwWrap">
+              <input id="competitorNameInput" type="text" placeholder="Örn: Rakip Ürün" />
+              <button class="btn ghost small kwAdd" id="addCompetitorBtn" type="button">Ekle</button>
+            </div>
+            <div class="activePreset" id="activeCompetitorLabel" aria-live="polite" style="margin-top:6px;">Seçilen rakip: —</div>
+            <div class="badgeRow" id="competitorPills" style="margin-top:8px;"></div>
+          </div>
+
+          <!-- 3) ÜSTÜN YÖN -->
+          <div class="fieldRow" style="margin-top:10px;">
+            <label for="superiorityInput">Üstün Yönünüz</label>
+            <div class="hint">İstersen aşağıdaki hızlı seçeneklere dokun, istersen elle yaz.</div>
+            <div class="badgeRow" id="superiorityPills"></div>
+            <input id="superiorityInput" type="text" placeholder="Örn: Günde tek doz ile hasta uyumunu artırır" />
+          </div>
+
+          <!-- 4) SMART CPR HEDEFİ (Ziyaret Öncesi Hazırlık'tan taşındı) -->
+          <div class="fieldRow" style="margin-top:10px;">
+            <label for="promoGoal">SMART CPR hedefinizi yazın</label>
+            <textarea id="promoGoal" class="autoGrow" placeholder="Örn: Bu ziyarette X konuda Y ölçülebilir hedef..." rows="2"></textarea>
+          </div>
+        </div>
+      </details>
+      
+      <!-- 3. TEMEL CPR KARTI (AKORDEON - KAPALI) -->
+      <details class="acc" data-acc="base" id="acc_base">
+        <summary>
+          <div class="accTitle">
+            <b><span class="arrow">▶</span> 1) Temel CPR (Stilsiz)</b>
+            <span>Sadece CPR yapısı kontrol edilir. CPR ≥ 13 olunca stiller aktifleşir.</span>
+          </div>
+          <div class="accMeta">
+            <span class="tag" id="mini_base">CPR: —</span>
+            <!-- 📱 FAZ 2: DRAFT BUTONU EKLENDİ -->
+            <button class="btn ghost small" id="btnSaveDraft" style="font-size:10px; padding:3px 8px;">💾 Kaydet</button>
+          </div>
+        </summary>
+        <div class="accBody">
+          <p class="hint">Bu bölümde <b>stil değerlendirmesi yapılmaz</b>. </p>
+          
+          <!-- CLAIM ALANI -->
+          <div class="cpr-section-card" data-section="claim">
+            <div class="claim-group">
+              <div class="claim-step problem">
+                <label for="base_claim_problem">Problemi Tanımlayın:</label>
+                <div class="textarea-wrapper">
+                  <textarea id="base_claim_problem" placeholder="Klinik problemi yazın..."></textarea>
+                  <button class="voice-btn" data-target="base_claim_problem" title="Sesli giriş">🎤</button>
+                </div>
+              </div>
+              
+              <div class="claim-step">
+                <label for="base_claim_effect">Etkisini Tanımlayın:</label>
+                <div class="textarea-wrapper">
+                  <textarea id="base_claim_effect" placeholder="Bu problemin hasta, hekim veya süreç üzerindeki etkisini yazın..."></textarea>
+                  <button class="voice-btn" data-target="base_claim_effect" title="Sesli giriş">🎤</button>
+                </div>
+              </div>
+            </div>
+            <div class="fieldTools">
+              <button class="btn ghost small" id="clear_base_claim_problem">Temizle</button>
+            </div>
+          </div>
+          
+          <!-- PROPOSITION - ÖZELLİK -->
+          <div class="cpr-section-card" data-section="feature">
+            <label for="base_feat">Ürün adı ve problemi çözen temel özelliği yazın</label>
+            <div class="textarea-wrapper">
+              <textarea id="base_feat" placeholder="Örn: Ürün X, günde tek doz kullanım ile hasta uyumunu artırır"></textarea>
+              <button class="voice-btn" data-target="base_feat" title="Sesli giriş">🎤</button>
+            </div>
+            <div class="hint-box" id="hint_base_feat">Ürününüzün rakiplerden farklı, hastaya sağladığı temel çözümü tanımlayın.</div>
+            <div class="fieldTools">
+              <button class="btn ghost small" id="clear_base_feat">Temizle</button>
+            </div>
+          </div>
+          
+          <!-- PROPOSITION - AVANTAJ -->
+          <div class="cpr-section-card" data-section="advantage">
+            <label for="base_adv">Rakiplere göre üstünlüğü, ticari isim kullanmadan yazın</label>
+            <div class="textarea-wrapper">
+              <textarea id="base_adv" placeholder="Örn: Bu sayede benzer etki gösterenlere göre günde tek doz kullanılır"></textarea>
+              <button class="voice-btn" data-target="base_adv" title="Sesli giriş">🎤</button>
+            </div>
+            <div class="hint-box" id="hint_base_adv">Rakip ürünlerle karşılaştırma yapın, ancak rakip ismi kullanmayın.</div>
+            <div class="fieldTools">
+              <button class="btn ghost small" id="clear_base_adv">Temizle</button>
+            </div>
+          </div>
+          
+          <!-- PROPOSITION - FAYDA ve RECOMMENDATION (Tek Kolon - Alt alta) -->
+          <div class="single-column">
+            <!-- PROPOSITION - FAYDA -->
+            <div class="cpr-section-card" data-section="benefit">
+              <label for="base_ben">Avantajın hastanın sorununu nasıl rahatlattığını yazın</label>
+              <div class="textarea-wrapper">
+                <textarea id="base_ben" placeholder="Örn: Tedavilerini aksatmadan devam ederler, işlerini yapmaktan geri kalmazlar"></textarea>
+                <button class="voice-btn" data-target="base_ben" title="Sesli giriş">🎤</button>
+              </div>
+              <div class="hint-box" id="hint_base_ben">Hastanın günlük yaşamında nasıl bir iyileşme/rahatlama sağladığını açıklayın.</div>
+              <div class="fieldTools">
+                <button class="btn ghost small" id="clear_base_ben">Temizle</button>
+              </div>
+            </div>
+            
+            <!-- RECOMMENDATION (Faydanın altında) -->
+            <div class="cpr-section-card" data-section="recommendation">
+              <label for="base_rec">Problemle ilişkilendirilmiş reçete öneri cümlenizi yazın</label>
+              <div class="textarea-wrapper">
+                <textarea id="base_rec" placeholder="Örn: Bu tür ataklarda, günde tek doz kullanılan X ile tedaviye bir an önce başlamayı tercih eder misiniz?"></textarea>
+                <button class="voice-btn" data-target="base_rec" title="Sesli giriş">🎤</button>
+              </div>
+              <div class="hint-box" id="hint_base_rec">Hekimden bir aksiyon talep edin (reçeteleme, değiştirme, başlama vb.).</div>
+              <div class="fieldTools">
+                <button class="btn ghost small" id="clear_base_rec">Temizle</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 📱 FAZ 2: DRAFT BUTONLARI EKLENDİ -->
+          <div class="fieldTools" style="justify-content: space-between; margin-top: 20px;">
+            <div>
+              <button class="btn ghost small" id="btnLoadDraft" style="display: none;">📂 Draft Yükle</button>
+              <button class="btn ghost small" id="btnShowDrafts">📋 Draft Listesi</button>
+            </div>
+            <div>
+              <button class="btn ghost small" id="btnClearAllDrafts">🗑️ Tümünü Temizle</button>
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <!-- 📝 FAZ 1: OTOMATİK CPR ÖZETİ BÖLÜMÜ -->
+      <div class="cpr-section-card" style="margin-top: 20px; border-color: #3b82f6;">
+        <div class="cpr-section-card::before" style="content: '🤖 OTOMATİK CPR ÖZETİ'; position: absolute; top: -10px; left: 16px; background: white; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #1d4ed8; border: 1px solid #3b82f6; border-radius: 20px; letter-spacing: 0.02em; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);">
+          🤖 OTOMATİK CPR ÖZETİ
+        </div>
+        
+        <label for="autoCPR">Birleştirilmiş CPR Metni</label>
+        <div class="textarea-wrapper">
+          <textarea id="autoCPR" placeholder="Claim → Özellik → Avantaj → Fayda → Recommendation birleşmiş CPR metni burada otomatik oluşur." readonly style="min-height: 120px; background-color: #f8fafc; border-color: #3b82f6;"></textarea>
+          <button class="voice-btn" data-target="autoCPR" title="Sesli düzenle">🎤</button>
+        </div>
+        
+        <div class="fieldTools">
+          <!-- GÜNCELLENDİ: Buton adları ve sıralama -->
+          <button class="btn primary small" id="generateAutoCPRBtn" style="background: #2563eb;">✅ CPR Onay</button>
+          <button class="btn ghost small" id="copyCPR">📋 CPR Kopyala</button>
+        </div>
+        
+        <div class="hint-box show">
+          <strong>🤖 Otomatik CPR Özeti:</strong> Tüm alanları doldurdukça, sistem "[Problem + Etki]... Bu nedenle [Özellik + Avantaj]. Böylece [Fayda]. Bu yüzden [Recommendation]" şeklinde tek bir CPR cümlesi oluşturur.
+        </div>
+      </div>
+      
+      <!-- 4. STİL BAZLI CPR'LAR KARTI (AKORDEON - KAPALI) -->
+      <details class="acc" data-acc="styles" id="acc_styles">
+        <summary>
+          <div class="accTitle">
+            <b><span class="arrow">▶</span> 2) Stil Bazlı CPR'lar</b>
+            <span>Temel CPR'ı koruyarak hedef doktorun öğrenme stiline uyarlayın.</span>
+          </div>
+          <div class="accMeta">
+            <span class="tag" id="mini_styles">4/4 stil kapalı</span>
+          </div>
+        </summary>
+        
+        <div class="accBody">
+          <div class="styleGrid" id="styleGrid">
+            <!-- Aktivist -->
+            <div class="styleCard" data-style="activist" id="activistCard">
+              <div class="styleHeader">
+                <div>
+                  <div class="styleTitle">Aktivist (Değişimci)</div>
+                  <div class="styleBadge">
+                    <span class="icon">🔥</span>
+                    <span>Yeni, deneyimsel, hızlı</span>
+                  </div>
+                </div>
+                <button class="btn small ghost" data-copy-base-to-style="activist">Temel CPR'ı Kopyala</button>
+              </div>
+              <div class="styleBody">
+                Aktivist için vurgu: <b>yeni deneyim, hızlı sonuç, hareket</b>.
+                <ul>
+                  <li>• İlk cümle: Probleme hızlı giriş</li>
+                  <li>• İkinci cümle: Etkiyi dramatize et</li>
+                  <li>• Son cümle: "Hemen" vurgulu Recommendation</li>
+                </ul>
+              </div>
+              <div class="textarea-wrapper">
+                <textarea class="styled-cpr-area" data-style="activist" id="activist_cpr" placeholder="Stile aktar butonuna basın veya buraya yazın... Aktivist CPR için: hızlı, dinamik, aksiyon odaklı ifadeler kullanın." disabled></textarea>
+                <button class="voice-btn" data-target="activist_cpr" title="Sesli düzenle" disabled>🎤</button>
+              </div>
+              <div class="feedback styleFeedback">
+                <b>Geri bildirim:</b> Temel CPR ≥ 13 olduğunda bu stil için koçluk mesajları aktifleşecek.
+              </div>
+            </div>
+            
+            <!-- Reflektör -->
+            <div class="styleCard" data-style="reflector" id="reflectorCard">
+              <div class="styleHeader">
+                <div>
+                  <div class="styleTitle">Reflektör (Dikkatli Gözlemci)</div>
+                  <div class="styleBadge reflector">
+                    <span class="icon">👁️</span>
+                    <span>Önce gözlem, sonra karar</span>
+                  </div>
+                </div>
+                <button class="btn small ghost" data-copy-base-to-style="reflector">Temel CPR'ı Kopyala</button>
+              </div>
+              <div class="styleBody">
+                Reflektör için vurgu: <b>veri, gözlem, sakin analiz</b>.
+                <ul>
+                  <li>• İlk cümle: Problemi tablo gibi betimle</li>
+                  <li>• İkinci cümle: Etkiyi gözleme dayalı anlat</li>
+                  <li>• Son cümle: "Düşündüğünüzde..." ile Recommendation</li>
+                </ul>
+              </div>
+              <div class="textarea-wrapper">
+                <textarea class="styled-cpr-area" data-style="reflector" id="reflector_cpr"
+                  placeholder="Stile aktar butonuna basın veya buraya yazın... Reflektör CPR için: sakin, gözleme dayalı, veri referanslı ifadeler kullanın." 
+                  disabled></textarea>
+                <button class="voice-btn" data-target="reflector_cpr" title="Sesli düzenle" disabled>🎤</button>
+              </div>
+              <div class="feedback styleFeedback">
+                <b>Geri bildirim:</b> Temel CPR ≥ 13 olduğunda bu stil için koçluk mesajları aktifleşecek.
+              </div>
+            </div>
+            
+            <!-- Teorist -->
+            <div class="styleCard" data-style="theorist" id="theoristCard">
+              <div class="styleHeader">
+                <div>
+                  <div class="styleTitle">Teorist (Sistematik Düşünen)</div>
+                  <div class="styleBadge theorist">
+                    <span class="icon">📐</span>
+                    <span>Kılavuz, mekanizma, sebep-sonuç</span>
+                  </div>
+                </div>
+                <button class="btn small ghost" data-copy-base-to-style="theorist">Temel CPR'ı Kopyala</button>
+              </div>
+              <div class="styleBody">
+                Teorist için vurgu: <b>kılavuz, mekanizma, rasyonel gerekçe</b>.
+                <ul>
+                  <li>• İlk cümle: Problemi tanı-tedavi ilişkisiyle aç</li>
+                  <li>• İkinci cümle: Etkiyi patofizyoloji ile ilişkilendir</li>
+                  <li>• Son cümle: Kılavuz uyumu vurgulu Recommendation</li>
+                </ul>
+              </div>
+              <div class="textarea-wrapper">
+                <textarea class="styled-cpr-area" data-style="theorist" id="theorist_cpr"
+                  placeholder="Stile aktar butonuna basın veya buraya yazın... Teorist CPR için: sistematik, kılavuz referanslı ve mekanizma temelli ifadeler kullanın." 
+                  disabled></textarea>
+                <button class="voice-btn" data-target="theorist_cpr" title="Sesli düzenle" disabled>🎤</button>
+              </div>
+              <div class="feedback styleFeedback">
+                <b>Geri bildirim:</b> Temel CPR ≥ 13 olduğunda bu stil için koçluk mesajları aktifleşecek.
+              </div>
+            </div>
+            
+            <!-- Pragmatist -->
+            <div class="styleCard" data-style="pragmatist" id="pragmatistCard">
+              <div class="styleHeader">
+                <div>
+                  <div class="styleTitle">Pragmatist (Uygulamacı)</div>
+                  <!-- GÜNCELLENDİ: Yeşil band kaldırıldı -->
+                  <div class="styleBadge pragmatist">
+                    <span class="icon">🛠️</span>
+                    <span>Pratik, uygulanabilir, "işe yarar mı?"</span>
+                  </div>
+                </div>
+                <button class="btn small ghost" data-copy-base-to-style="pragmatist">Temel CPR'ı Kopyala</button>
+              </div>
+              <div class="styleBody">
+                Pragmatist için vurgu: <b>pratiklik, iş akışı, kolaylık</b>.
+                <ul>
+                  <li>• İlk cümle: Problemi günlük pratikten örnekle</li>
+                  <li>• İkinci cümle: Etkiyi iş yükü ve süreklilikle bağla</li>
+                  <li>• Son cümle: Rutin pratiğe nasıl oturduğunu anlatan Recommendation</li>
+                </ul>
+              </div>
+              
+              <!-- ADIM 1: TEK CPR Alanı -->
+              <!-- GÜNCELLENDİ: "Uygulamacı CPR'ınız" yeşil bandı kaldırıldı -->
+              <div class="textarea-wrapper">
+                <textarea class="styled-cpr-area" data-style="pragmatist" id="pragmatist_cpr"
+                  placeholder="Stile aktar butonuna basın veya buraya yazın... Pragmatist CPR için: Pratik, uygulanabilir, 'nasıl yapılır' odaklı ifadeler kullanın." 
+                  disabled></textarea>
+                <button class="voice-btn" data-target="pragmatist_cpr" title="Sesli düzenle" disabled>🎤</button>
+              </div>
+              
+              <div class="feedback styleFeedback">
+                <!-- GÜNCELLENDİ: Geri bildirim metni diğer stillerle aynı -->
+                <b>Geri bildirim:</b> Temel CPR ≥ 13 olduğunda bu stil için koçluk mesajları aktifleşecek.
+              </div>
+            </div>
+          </div>
+          
+          <!-- GÜNCELLENDİ: Açıklama metinleri kaldırıldı -->
+        </div>
+      </details>
+    </main>
+  </div>
+  
+  <!-- 📱 FAZ 2: MOBİL BİLDİRİM ALANI -->
+  <div id="mobileNotificationArea"></div>
+  
+  <script>
+  /* ============================================
+     GÜVENLİ VERSİYON - DÜZGÜN ÇALIŞAN KOD
+     ============================================ */
+  
+  // ============================================
+  // 📱 FAZ 1: OTOMATİK CPR ÖZETİ ÜRETİMİ
+  // ============================================
+  
+  const AutoCPRGenerator = {
+    generate: function() {
+      const problem = document.getElementById('base_claim_problem')?.value.trim() || '';
+      const effect = document.getElementById('base_claim_effect')?.value.trim() || '';
+      const feature = document.getElementById('base_feat')?.value.trim() || '';
+      const advantage = document.getElementById('base_adv')?.value.trim() || '';
+      const benefit = document.getElementById('base_ben')?.value.trim() || '';
+      const recommendation = document.getElementById('base_rec')?.value.trim() || '';
+      
+      if (!problem && !effect && !feature && !advantage && !benefit && !recommendation) {
+        return '';
       }
-    }
-
-    // ===== KAYDETME FONKSİYONU =====
-    function saveSelection(type, behavior, value) {
-      if (!behavior) {
-        alert('Lütfen önce bir davranış seçin.');
+      
+      let autoCPR = '';
+      
+      if (problem && effect) {
+        autoCPR += `"${problem} Bu durum ${effect.toLowerCase()}... `;
+      } else if (problem) {
+        autoCPR += `"${problem}... `;
+      } else if (effect) {
+        autoCPR += `"${effect}... `;
+      }
+      
+      if (feature && advantage) {
+        autoCPR += `Bu nedenle ${feature}, ${advantage.toLowerCase()}. `;
+      } else if (feature) {
+        autoCPR += `Bu nedenle ${feature}. `;
+      } else if (advantage) {
+        autoCPR += `Bu nedenle ${advantage}. `;
+      }
+      
+      if (benefit) {
+        autoCPR += `Böylece ${benefit}. `;
+      }
+      
+      if (recommendation) {
+        const hasQuestionMark = recommendation.trim().endsWith('?');
+        autoCPR += `Bu yüzden ${recommendation}${!hasQuestionMark ? '?' : ''}"`;
+      } else {
+        autoCPR = autoCPR.trim();
+        if (!autoCPR.endsWith('"')) {
+          autoCPR += '"';
+        }
+      }
+      
+      return autoCPR;
+    },
+    
+    validateAllFields: function() {
+      const fields = [
+        { id: 'base_claim_problem', name: 'Problem' },
+        { id: 'base_claim_effect', name: 'Etki' },
+        { id: 'base_feat', name: 'Özellik' },
+        { id: 'base_adv', name: 'Avantaj' },
+        { id: 'base_ben', name: 'Fayda' },
+        { id: 'base_rec', name: 'Recommendation' }
+      ];
+      
+      const emptyFields = [];
+      
+      fields.forEach(field => {
+        const value = document.getElementById(field.id)?.value.trim() || '';
+        if (!value || value.length < 3) {
+          emptyFields.push(field.name);
+        }
+      });
+      
+      return emptyFields;
+    },
+    
+    confirmCPR: function() {
+      const emptyFields = this.validateAllFields();
+      
+      if (emptyFields.length > 0) {
+        showMobileNotification(`Eksik alanlar: ${emptyFields.join(', ')}. Lütfen tüm alanları doldurun.`, 'error');
         return false;
       }
-
-      if (type === 'me') {
-        mySelections[behavior] = parseInt(value);
-        meSaveBtn.innerHTML = '<span>✓ Kaydedildi</span>';
-        meSaveBtn.classList.add('saved');
-      } else {
-        otherSelections[behavior] = parseInt(value);
-        otherSaveBtn.innerHTML = '<span>✓ Kaydedildi</span>';
-        otherSaveBtn.classList.add('saved');
+      
+      this.updateAutoCPR();
+      
+      if (typeof CPRFlowControl !== 'undefined') {
+        CPRFlowControl.updateCPRScore();
       }
-
-      // 2 saniye sonra butonu eski haline getir
-      setTimeout(() => {
-        if (type === 'me') {
-          meSaveBtn.innerHTML = '<span>Kaydet</span>';
-          meSaveBtn.classList.remove('saved');
-        } else {
-          otherSaveBtn.innerHTML = '<span>Kaydet</span>';
-          otherSaveBtn.classList.remove('saved');
-        }
-      }, 2000);
-
-      updateProgress();
-      checkCompletion();
+      
+      showMobileNotification('✅ CPR onaylandı! Puan hesaplandı ve stil alanları kontrol ediliyor.', 'success');
       return true;
-    }
-
-    // ===== PROGRESS UPDATE =====
-    function updateProgress() {
-      const meCompleted = Object.keys(mySelections).length;
-      const otherCompleted = Object.keys(otherSelections).length;
+    },
+    
+    updateAutoCPR: function() {
+      const autoCPR = this.generate();
+      const autoCPRTextarea = document.getElementById('autoCPR');
       
-      meCount.textContent = meCompleted;
-      otherCount.textContent = otherCompleted;
-      
-      // Kartı tamamlanmış olarak işaretle
-      if (meCompleted === behaviors.length) {
-        meCard.classList.add('completed');
-      }
-      if (otherCompleted === behaviors.length) {
-        otherCard.classList.add('completed');
-      }
-    }
-
-    // ===== TAMAMLAMA KONTROLÜ =====
-    function checkCompletion() {
-      const meCompleted = Object.keys(mySelections).length === behaviors.length;
-      const otherCompleted = Object.keys(otherSelections).length === behaviors.length;
-      
-      // Grafikleri göster/gizle
-      if (meCompleted) {
-        document.getElementById('meChartPlaceholder').classList.add('hidden');
-        document.getElementById('meChart').classList.remove('hidden');
-        renderChart('meChart', mySelections, '#3b82f6');
-      }
-      
-      if (otherCompleted) {
-        document.getElementById('otherChartPlaceholder').classList.add('hidden');
-        document.getElementById('otherChart').classList.remove('hidden');
-        renderChart('otherChart', otherSelections, '#ef4444');
-      }
-      
-      // Karşılaştırma ve önerileri göster
-      if (meCompleted && otherCompleted) {
-        document.getElementById('comparisonPlaceholder').classList.add('hidden');
-        document.getElementById('comparisonList').classList.remove('hidden');
-        document.getElementById('recommendationPlaceholder').classList.add('hidden');
-        document.getElementById('recommendationList').classList.remove('hidden');
+      if (autoCPRTextarea) {
+        autoCPRTextarea.value = autoCPR;
         
-        renderComparison();
-        renderRecommendations();
+        const copyBtn = document.getElementById('copyCPR');
+        if (copyBtn) {
+          const cprScore = CPRFlowControl?.currentCPRScore || 0;
+          if (cprScore >= 13 && autoCPR.length > 20) {
+            copyBtn.disabled = false;
+            copyBtn.style.opacity = '1';
+            copyBtn.title = 'CPR\'ı panoya kopyala';
+          } else {
+            copyBtn.disabled = true;
+            copyBtn.style.opacity = '0.5';
+            copyBtn.title = 'CPR puanı ≥ 13 olmalı';
+          }
+        }
       }
-    }
-
-    // ===== GRAFİK RENDER =====
-    function renderChart(canvasId, data, color) {
-      const ctx = document.getElementById(canvasId);
-      const labels = [];
-      const values = [];
+    },
+    
+    copyToClipboard: function() {
+      const autoCPR = document.getElementById('autoCPR')?.value;
+      const cprScore = CPRFlowControl?.currentCPRScore || 0;
       
-      behaviors.forEach(behavior => {
-        labels.push(behavior);
-        values.push(data[behavior] || 1);
+      if (!autoCPR || autoCPR.trim().length < 10) {
+        showMobileNotification('Kopyalanacak CPR metni yok', 'warning');
+        return;
+      }
+      
+      if (cprScore < 13) {
+        showMobileNotification('CPR kopyalamak için puan ≥ 13 olmalı', 'warning');
+        return;
+      }
+      
+      navigator.clipboard.writeText(autoCPR).then(() => {
+        showMobileNotification('CPR panoya kopyalandı', 'success');
+      }).catch(err => {
+        console.error('Kopyalama hatası:', err);
+        showMobileNotification('Kopyalama başarısız', 'error');
+      });
+    },
+    
+    init: function() {
+      const textareas = [
+        'base_claim_problem', 'base_claim_effect', 
+        'base_feat', 'base_adv', 'base_ben', 'base_rec'
+      ];
+      
+      textareas.forEach(id => {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+          textarea.addEventListener('input', () => {
+            this.updateAutoCPR();
+          });
+        }
       });
       
-      // Mevcut chart'ı yok et
-      const existingChart = Chart.getChart(ctx);
-      if (existingChart) {
-        existingChart.destroy();
+      const generateBtn = document.getElementById('generateAutoCPRBtn');
+      if (generateBtn) {
+        generateBtn.addEventListener('click', () => {
+          this.confirmCPR();
+        });
       }
       
-      // Yeni chart oluştur
-      new Chart(ctx, {
-        type: 'radar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Şiddet',
-            data: values,
-            backgroundColor: color + '20',
-            borderColor: color,
-            borderWidth: 2,
-            pointBackgroundColor: color,
-            pointRadius: 4
-          }]
+      const copyBtn = document.getElementById('copyCPR');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          this.copyToClipboard();
+        });
+        
+        copyBtn.disabled = true;
+        copyBtn.style.opacity = '0.5';
+        copyBtn.title = 'CPR puanı ≥ 13 olmalı';
+      }
+      
+      setTimeout(() => {
+        this.updateAutoCPR();
+      }, 500);
+      
+      console.log('✅ Otomatik CPR Üretimi sistemi hazır');
+    }
+  };
+  
+  // ============================================
+  // 📄 YENİ: TÜM RAPOR PDF SİSTEMİ
+  // ============================================
+  
+  const ComprehensivePDFReport = {
+    generateFullReport: function() {
+      try {
+        const fullReportBtn = document.getElementById('fullReportPDF');
+        const originalText = fullReportBtn.innerHTML;
+        const originalBackground = fullReportBtn.style.background;
+        
+        fullReportBtn.innerHTML = '📄 Oluşturuluyor...';
+        fullReportBtn.style.background = '#9ca3af';
+        fullReportBtn.style.cursor = 'wait';
+        
+        setTimeout(() => {
+          const reportData = this.collectAllData();
+          const docDefinition = this.createFullDocumentDefinition(reportData);
+          
+          const fileName = `FAST_CPR_Tum_Rapor_${new Date().toISOString().slice(0, 10)}.pdf`;
+          pdfMake.createPdf(docDefinition).download(fileName);
+          
+          showMobileNotification('Tüm rapor PDF olarak indiriliyor...', 'success');
+          
+          fullReportBtn.innerHTML = originalText;
+          fullReportBtn.style.background = originalBackground;
+          fullReportBtn.style.cursor = 'pointer';
+        }, 500);
+        
+      } catch (error) {
+        console.error('PDF oluşturma hatası:', error);
+        showMobileNotification('PDF oluşturulurken hata oluştu', 'error');
+        
+        const fullReportBtn = document.getElementById('fullReportPDF');
+        fullReportBtn.innerHTML = '📄 Tüm Raporu PDF\'e Aktar';
+        fullReportBtn.style.background = '#3b82f6';
+        fullReportBtn.style.cursor = 'pointer';
+      }
+    },
+    
+    collectAllData: function() {
+      return {
+        preparation: {
+          promoContext: document.getElementById('promoContext')?.value.trim() || '—',
+          learningStyle: document.getElementById('learningStyle')?.value.trim() || '—',
+          selectedBehaviors: SocialLearningStyleManager ? SocialLearningStyleManager.getSelectedBehaviors().join(', ') || '—' : '—'
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            r: {
-              min: 1,
-              max: 9,
-              ticks: {
-                stepSize: 1
+        
+        productPrep: {
+          productName: document.getElementById('productNameInput')?.value.trim() || '—',
+          competitorName: document.getElementById('competitorNameInput')?.value.trim() || '—',
+          superiority: document.getElementById('superiorityInput')?.value.trim() || '—',
+          promoGoal: document.getElementById('promoGoal')?.value.trim() || '—'
+        },
+        
+        baseCPR: {
+          claim_problem: document.getElementById('base_claim_problem')?.value.trim() || '—',
+          claim_effect: document.getElementById('base_claim_effect')?.value.trim() || '—',
+          feature: document.getElementById('base_feat')?.value.trim() || '—',
+          advantage: document.getElementById('base_adv')?.value.trim() || '—',
+          benefit: document.getElementById('base_ben')?.value.trim() || '—',
+          recommendation: document.getElementById('base_rec')?.value.trim() || '—'
+        },
+        
+        styleCPRs: {
+          activist: document.getElementById('activist_cpr')?.value.trim() || '—',
+          reflector: document.getElementById('reflector_cpr')?.value.trim() || '—',
+          theorist: document.getElementById('theorist_cpr')?.value.trim() || '—',
+          pragmatist: document.getElementById('pragmatist_cpr')?.value.trim() || '—'
+        },
+        
+        generatedAt: new Date().toLocaleString('tr-TR'),
+        date: new Date().toLocaleDateString('tr-TR'),
+        time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+      };
+    },
+    
+    createFullDocumentDefinition: function(data) {
+      return {
+        pageSize: 'A4',
+        pageMargins: [40, 80, 40, 60],
+        
+        header: function(currentPage, pageCount) {
+          return [
+            {
+              text: 'FAST CPR KOÇU',
+              style: 'mainHeader',
+              alignment: 'center',
+              margin: [0, 20, 0, 0]
+            },
+            
+            {
+              text: data.date + ' ' + data.time,
+              style: 'dateHeader',
+              alignment: 'right',
+              margin: [0, 40, 40, 0]
+            }
+          ];
+        },
+        
+        content: [
+          {
+            text: '1. SOSYAL STİL VE ÖĞRENME STİLİ TANIMLAMA',
+            style: 'sectionHeader',
+            pageBreak: 'before',
+            margin: [0, 30, 0, 10]
+          },
+          this.createPreparationSection(data.preparation),
+          
+          {
+            text: '2. ÜRÜN-RAKİP-ÜSTÜNLÜKLER-HEDEF',
+            style: 'sectionHeader',
+            margin: [0, 20, 0, 10]
+          },
+          this.createProductPrepSection(data.productPrep),
+          
+          {
+            text: '3. TEMEL CPR',
+            style: 'sectionHeader',
+            margin: [0, 20, 0, 10]
+          },
+          this.createBaseCPRSection(data.baseCPR),
+          
+          {
+            text: '4. ÖĞRENME STİLLERİNE GÖRE CPR\'LAR',
+            style: 'sectionHeader',
+            margin: [0, 20, 0, 10]
+          },
+          this.createStyleCPRSection(data.styleCPRs),
+          
+          {
+            text: 'FAST CPR Koçu tarafından oluşturulmuştur • ' + data.generatedAt,
+            style: 'footer',
+            margin: [0, 30, 0, 0]
+          }
+        ],
+        
+        styles: {
+          mainHeader: {
+            fontSize: 20,
+            bold: true,
+            color: '#1d4ed8'
+          },
+          
+          dateHeader: {
+            fontSize: 10,
+            color: '#666',
+            italics: true
+          },
+          
+          sectionHeader: {
+            fontSize: 14,
+            bold: true,
+            color: '#1e40af',
+            background: '#eff6ff',
+            padding: [8, 4],
+            border: [1, 'solid', '#dbeafe'],
+            marginBottom: 8
+          },
+          
+          subsection: {
+            fontSize: 12,
+            bold: true,
+            color: '#374151',
+            margin: [0, 8, 0, 4]
+          },
+          
+          contentText: {
+            fontSize: 11,
+            lineHeight: 1.4,
+            margin: [0, 0, 0, 6]
+          },
+          
+          italicCPR: {
+            fontSize: 11,
+            italics: true,
+            lineHeight: 1.4,
+            background: '#f8fafc',
+            padding: [8, 10],
+            border: [1, 'dashed', '#e5e7eb'],
+            margin: [0, 4, 0, 12]
+          },
+          
+          footer: {
+            fontSize: 9,
+            color: '#6b7280',
+            alignment: 'center',
+            italics: true
+          },
+          
+          label: {
+            fontSize: 11,
+            bold: true,
+            color: '#4b5563'
+          },
+          
+          value: {
+            fontSize: 11,
+            color: '#111827',
+            margin: [0, 0, 0, 8]
+          }
+        }
+      };
+    },
+    
+    createPreparationSection: function(prep) {
+      return [
+        {
+          text: [{ text: 'Doktor/Eczacının Sosyal Stili: ', style: 'label' }, prep.promoContext],
+          style: 'contentText'
+        },
+        {
+          text: [{ text: 'Seçilen Davranışlar: ', style: 'label' }, prep.selectedBehaviors],
+          style: 'contentText'
+        },
+        {
+          text: [{ text: 'Öğrenme Stili: ', style: 'label' }, prep.learningStyle],
+          style: 'contentText',
+          margin: [0, 0, 0, 16]
+        }
+      ];
+    },
+    
+    createProductPrepSection: function(product) {
+      return [
+        {
+          text: [{ text: 'Ürün: ', style: 'label' }, product.productName],
+          style: 'contentText'
+        },
+        {
+          text: [{ text: 'Rakip: ', style: 'label' }, product.competitorName],
+          style: 'contentText'
+        },
+        {
+          text: [{ text: 'Üstün Yön: ', style: 'label' }, product.superiority],
+          style: 'contentText'
+        },
+        {
+          text: [{ text: 'SMART CPR Hedefi: ', style: 'label' }, product.promoGoal],
+          style: 'contentText',
+          margin: [0, 0, 0, 16]
+        }
+      ];
+    },
+    
+    createBaseCPRSection: function(cpr) {
+      return [
+        {
+          text: 'CLAIM - Problem:',
+          style: 'subsection'
+        },
+        {
+          text: cpr.claim_problem,
+          style: 'value'
+        },
+        {
+          text: 'CLAIM - Etki:',
+          style: 'subsection'
+        },
+        {
+          text: cpr.claim_effect,
+          style: 'value'
+        },
+        {
+          text: 'PROPOSITION - Özellik:',
+          style: 'subsection'
+        },
+        {
+          text: cpr.feature,
+          style: 'value'
+        },
+        {
+          text: 'PROPOSITION - Avantaj:',
+          style: 'subsection'
+        },
+        {
+          text: cpr.advantage,
+          style: 'value'
+        },
+        {
+          text: 'PROPOSITION - Fayda:',
+          style: 'subsection'
+        },
+        {
+          text: cpr.benefit,
+          style: 'value'
+        },
+        {
+          text: 'RECOMMENDATION:',
+          style: 'subsection'
+        },
+        {
+          text: cpr.recommendation,
+          style: 'value',
+          margin: [0, 0, 0, 16]
+        }
+      ];
+    },
+    
+    createStyleCPRSection: function(styles) {
+      return [
+        {
+          text: 'Aktivist CPR',
+          style: 'subsection'
+        },
+        {
+          text: styles.activist,
+          style: 'italicCPR'
+        },
+        
+        {
+          text: 'Reflektör CPR',
+          style: 'subsection'
+        },
+        {
+          text: styles.reflector,
+          style: 'italicCPR'
+        },
+        
+        {
+          text: 'Teorist CPR',
+          style: 'subsection'
+        },
+        {
+          text: styles.theorist,
+          style: 'italicCPR'
+        },
+        
+        {
+          text: 'Pragmatist CPR',
+          style: 'subsection'
+        },
+        {
+          text: styles.pragmatist,
+          style: 'italicCPR',
+          margin: [0, 4, 0, 0]
+        }
+      ];
+    }
+  };
+  
+  // ============================================
+  // YENİ: SOSYAL STİL VE ÖĞRENME STİLİ YÖNETİCİSİ
+  // ============================================
+  
+  const SocialLearningStyleManager = {
+    storageKey: 'fastcpr_social_learning_styles',
+    selectedBehaviors: [],
+    selectedLearningStyle: '',
+    
+    behaviors: [
+      "Konuşma hızını artırma",
+      "Konuşma hızını yavaşlatma",
+      "Sesin hacmini artırma",
+      "Sesin hacmini azaltma",
+      "Mimikleri artırma",
+      "Mimikleri azaltma",
+      "Göz temasını artırma",
+      "Göz temasını azaltma",
+      "Ellerin kullanımını artırma",
+      "Ellerin kullanımını azaltma",
+      "Atak duruş sergileme",
+      "Çekinik duruş sergileme",
+      "Gerçekleri konuşma",
+      "Hikayemsi konuşma",
+      "Kelime sayısını artırma",
+      "Kelime sayısını azaltma"
+    ],
+    
+    learningStyles: [
+      { id: 'activist', name: 'Aktivist', color: '#f97316', icon: '🔥' },
+      { id: 'reflector', name: 'Reflektör', color: '#8b5cf6', icon: '👁️' },
+      { id: 'theorist', name: 'Teorist', color: '#0ea5e9', icon: '📐' },
+      { id: 'pragmatist', name: 'Pragmatist', color: '#10b981', icon: '🛠️' }
+    ],
+    
+    init: function() {
+      this.load();
+      this.renderBehaviors();
+      this.renderLearningStyles();
+      this.bindEvents();
+      console.log('✅ Sosyal Stil ve Öğrenme Stili Yöneticisi hazır');
+    },
+    
+    load: function() {
+      try {
+        const saved = localStorage.getItem(this.storageKey);
+        if (saved) {
+          const data = JSON.parse(saved);
+          this.selectedBehaviors = data.selectedBehaviors || [];
+          this.selectedLearningStyle = data.selectedLearningStyle || '';
+        }
+      } catch (e) {
+        console.error('Yükleme hatası:', e);
+      }
+    },
+    
+    save: function() {
+      try {
+        const data = {
+          selectedBehaviors: this.selectedBehaviors,
+          selectedLearningStyle: this.selectedLearningStyle
+        };
+        localStorage.setItem(this.storageKey, JSON.stringify(data));
+      } catch (e) {
+        console.error('Kaydetme hatası:', e);
+      }
+    },
+    
+    renderBehaviors: function() {
+      const behaviorPills = document.getElementById('behaviorPills');
+      const selectedBehaviorsList = document.getElementById('selectedBehaviorsList');
+      
+      if (!behaviorPills || !selectedBehaviorsList) return;
+      
+      behaviorPills.innerHTML = '';
+      this.behaviors.forEach(behavior => {
+        const pill = document.createElement('div');
+        pill.className = 'behavior-pill';
+        pill.textContent = behavior;
+        pill.dataset.behavior = behavior;
+        
+        if (this.selectedBehaviors.includes(behavior)) {
+          pill.classList.add('selected');
+        }
+        
+        pill.addEventListener('click', () => {
+          this.toggleBehavior(behavior);
+        });
+        
+        behaviorPills.appendChild(pill);
+      });
+      
+      this.updateSelectedBehaviorsList();
+    },
+    
+    renderLearningStyles: function() {
+      const learningStylePills = document.getElementById('learningStylePills');
+      const learningStyleInput = document.getElementById('learningStyle');
+      
+      if (!learningStylePills || !learningStyleInput) return;
+      
+      learningStylePills.innerHTML = '';
+      this.learningStyles.forEach(style => {
+        const pill = document.createElement('div');
+        pill.className = `learning-style-pill ${style.id}`;
+        pill.textContent = `${style.icon} ${style.name}`;
+        pill.dataset.style = style.id;
+        
+        if (this.selectedLearningStyle === style.id) {
+          pill.classList.add('selected');
+          learningStyleInput.value = style.name;
+        }
+        
+        pill.addEventListener('click', () => {
+          this.selectLearningStyle(style.id);
+        });
+        
+        learningStylePills.appendChild(pill);
+      });
+    },
+    
+    toggleBehavior: function(behavior) {
+      const index = this.selectedBehaviors.indexOf(behavior);
+      
+      if (index === -1) {
+        this.selectedBehaviors.push(behavior);
+      } else {
+        this.selectedBehaviors.splice(index, 1);
+      }
+      
+      this.save();
+      this.renderBehaviors();
+      this.updateSelectedBehaviorsList();
+    },
+    
+    selectLearningStyle: function(styleId) {
+      this.selectedLearningStyle = styleId;
+      this.save();
+      this.renderLearningStyles();
+      
+      this.updateStyleCPRVisibility();
+      
+      const styleName = this.learningStyles.find(s => s.id === styleId)?.name || '';
+      showMobileNotification(`Öğrenme stili seçildi: ${styleName}`, 'success');
+    },
+    
+    updateSelectedBehaviorsList: function() {
+      const selectedBehaviorsList = document.getElementById('selectedBehaviorsList');
+      if (!selectedBehaviorsList) return;
+      
+      selectedBehaviorsList.innerHTML = '';
+      
+      if (this.selectedBehaviors.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'small';
+        emptyMessage.textContent = 'Henüz davranış seçilmedi';
+        emptyMessage.style.color = '#9ca3af';
+        emptyMessage.style.fontStyle = 'italic';
+        selectedBehaviorsList.appendChild(emptyMessage);
+        return;
+      }
+      
+      this.selectedBehaviors.forEach(behavior => {
+        const pill = document.createElement('div');
+        pill.className = 'selected-behavior-pill';
+        
+        const text = document.createElement('span');
+        text.textContent = behavior;
+        
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'remove';
+        removeBtn.textContent = '×';
+        removeBtn.title = 'Kaldır';
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggleBehavior(behavior);
+        });
+        
+        pill.appendChild(text);
+        pill.appendChild(removeBtn);
+        selectedBehaviorsList.appendChild(pill);
+      });
+    },
+    
+    updateStyleCPRVisibility: function() {
+      const styleGrid = document.getElementById('styleGrid');
+      if (!styleGrid) return;
+      
+      const styleCards = document.querySelectorAll('.styleCard');
+      styleCards.forEach(card => {
+        card.style.display = 'none';
+      });
+      
+      if (this.selectedLearningStyle) {
+        const selectedCard = document.getElementById(`${this.selectedLearningStyle}Card`);
+        if (selectedCard) {
+          selectedCard.style.display = 'block';
+          
+          const styleCounter = document.getElementById('mini_styles');
+          if (styleCounter) {
+            const styleName = this.learningStyles.find(s => s.id === this.selectedLearningStyle)?.name || '';
+            styleCounter.textContent = `1/1 stil (${styleName})`;
+          }
+        }
+      } else {
+        styleCards.forEach(card => {
+          card.style.display = 'block';
+        });
+        
+        const styleCounter = document.getElementById('mini_styles');
+        if (styleCounter) {
+          styleCounter.textContent = '0/4 stil kapalı';
+        }
+      }
+    },
+    
+    getSelectedBehaviors: function() {
+      return this.selectedBehaviors;
+    },
+    
+    getSelectedLearningStyle: function() {
+      return this.selectedLearningStyle;
+    },
+    
+    bindEvents: function() {
+      const behaviorDetails = document.getElementById('behaviorDetails');
+      if (behaviorDetails) {
+        behaviorDetails.addEventListener('toggle', () => {
+          if (behaviorDetails.open) {
+            this.updateSelectedBehaviorsList();
+          }
+        });
+      }
+    }
+  };
+  
+  // ============================================
+  // MOBİL ÖZELLİKLER
+  // ============================================
+  
+  const MobileFeatures = {
+    SpeechToText: {
+      recognition: null,
+      isListening: false,
+      currentTarget: null,
+      voiceIndicator: null,
+      
+      init: function() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          this.recognition = new SpeechRecognition();
+          this.recognition.continuous = false;
+          this.recognition.interimResults = true;
+          this.recognition.lang = 'tr-TR';
+          this.recognition.maxAlternatives = 3;
+          
+          this.recognition.onstart = () => {
+            this.isListening = true;
+            this.showListeningStatus(true);
+            this.showVoiceIndicator();
+          };
+          
+          this.recognition.onresult = (event) => {
+            let finalTranscript = '';
+            let interimTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              if (event.results[i].isFinal) {
+                finalTranscript += event.results[i][0].transcript;
+              } else {
+                interimTranscript += event.results[i][0].transcript;
               }
             }
-          },
-          plugins: {
-            legend: {
-              display: false
+            
+            if (this.currentTarget && (finalTranscript || interimTranscript)) {
+              const textarea = document.getElementById(this.currentTarget);
+              if (textarea) {
+                if (finalTranscript) {
+                  const currentText = textarea.value;
+                  textarea.value = currentText + (currentText ? ' ' : '') + finalTranscript;
+                  textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                  
+                  if (typeof AutoCPRGenerator !== 'undefined') {
+                    AutoCPRGenerator.updateAutoCPR();
+                  }
+                  
+                  this.showVoiceFeedback('✓ Eklendi');
+                }
+                
+                if (interimTranscript && this.voiceIndicator) {
+                  this.voiceIndicator.querySelector('.voice-text').textContent = interimTranscript;
+                }
+              }
             }
-          }
-        }
-      });
-    }
-
-    // ===== KARŞILAŞTIRMA RENDER =====
-    function renderComparison() {
-      const list = document.getElementById('comparisonList');
-      list.innerHTML = '';
-      
-      behaviors.forEach(behavior => {
-        const myVal = mySelections[behavior] || 0;
-        const otherVal = otherSelections[behavior] || 0;
-        const diff = myVal - otherVal;
-        
-        if (myVal > 0 && otherVal > 0) {
-          const li = document.createElement('li');
-          li.className = 'comparison-item';
+          };
           
-          li.innerHTML = `
-            <span class="item-name">${behavior}</span>
-            <div class="item-values">
-              <span class="me-value">${myVal}</span>
-              <span class="other-value">${otherVal}</span>
-              ${diff > 0 ? `<span class="diff-value">+${diff}</span>` : ''}
+          this.recognition.onerror = (event) => {
+            console.error('Ses tanıma hatası:', event.error);
+            showMobileNotification('Ses tanıma hatası: ' + this.getErrorMessage(event.error), 'error');
+            this.hideVoiceIndicator();
+          };
+          
+          this.recognition.onend = () => {
+            this.isListening = false;
+            this.showListeningStatus(false);
+            this.hideVoiceIndicator();
+            this.currentTarget = null;
+          };
+          
+          console.log('✅ Gelişmiş sesli giriş sistemi hazır');
+        } else {
+          console.warn('⚠️ Bu tarayıcı ses tanımayı desteklemiyor');
+          document.querySelectorAll('.voice-btn').forEach(btn => {
+            btn.style.opacity = '0.5';
+            btn.title = 'Sesli giriş desteklenmiyor';
+            btn.disabled = true;
+          });
+        }
+      },
+      
+      startListening: function(targetId) {
+        if (!this.recognition) {
+          showMobileNotification('Sesli giriş desteklenmiyor', 'error');
+          return;
+        }
+        
+        if (this.isListening && this.currentTarget === targetId) {
+          this.stopListening();
+          return;
+        }
+        
+        this.currentTarget = targetId;
+        try {
+          this.recognition.start();
+        } catch (error) {
+          console.error('Ses tanıma başlatma hatası:', error);
+          showMobileNotification('Ses tanıma başlatılamadı', 'error');
+        }
+      },
+      
+      stopListening: function() {
+        if (this.recognition && this.isListening) {
+          this.recognition.stop();
+        }
+      },
+      
+      toggleListening: function(targetId) {
+        if (this.isListening && this.currentTarget === targetId) {
+          this.stopListening();
+        } else {
+          this.startListening(targetId);
+        }
+      },
+      
+      showListeningStatus: function(isListening) {
+        const buttons = document.querySelectorAll('.voice-btn');
+        buttons.forEach(btn => {
+          if (btn.dataset.target === this.currentTarget) {
+            btn.classList.toggle('listening', isListening);
+            btn.innerHTML = isListening ? '🔴' : '🎤';
+            btn.title = isListening ? 'Dinleniyor... (durdurmak için tıkla)' : 'Sesli giriş';
+          }
+        });
+      },
+      
+      showVoiceIndicator: function() {
+        if (this.voiceIndicator) {
+          this.voiceIndicator.remove();
+        }
+        
+        this.voiceIndicator = document.createElement('div');
+        this.voiceIndicator.className = 'voice-indicator';
+        this.voiceIndicator.innerHTML = `
+          <div class="pulse"></div>
+          <span class="voice-text">Dinleniyor... Konuşmaya başlayın</span>
+          <button class="btn ghost small" id="stopVoiceBtn" style="margin-left: 10px; padding: 2px 8px; font-size: 11px;">Durdur</button>
+        `;
+        
+        document.body.appendChild(this.voiceIndicator);
+        
+        document.getElementById('stopVoiceBtn').addEventListener('click', () => {
+          this.stopListening();
+        });
+      },
+      
+      hideVoiceIndicator: function() {
+        if (this.voiceIndicator) {
+          this.voiceIndicator.remove();
+          this.voiceIndicator = null;
+        }
+      },
+      
+      showVoiceFeedback: function(message) {
+        const textarea = document.getElementById(this.currentTarget);
+        if (!textarea) return;
+        
+        const feedback = document.createElement('div');
+        feedback.className = 'voice-feedback';
+        feedback.textContent = message;
+        
+        const wrapper = textarea.parentElement;
+        wrapper.appendChild(feedback);
+        
+        setTimeout(() => {
+          if (feedback.parentElement) {
+            feedback.remove();
+          }
+        }, 1500);
+      },
+      
+      getErrorMessage: function(errorCode) {
+        const errors = {
+          'no-speech': 'Konuşma algılanamadı',
+          'audio-capture': 'Mikrofon erişimi yok',
+          'not-allowed': 'Mikrofon izni verilmedi',
+          'network': 'Ağ hatası',
+          'aborted': 'İşlem iptal edildi',
+          'service-not-allowed': 'Servis izni yok'
+        };
+        return errors[errorCode] || 'Bilinmeyen hata';
+      }
+    },
+    
+    ConnectivityManager: {
+      init: function() {
+        const offlineStatus = document.getElementById('offlineStatus');
+        const connectivityText = document.getElementById('connectivityText');
+        
+        if (!offlineStatus || !connectivityText) return;
+        
+        this.updateStatus();
+        
+        window.addEventListener('online', () => {
+          this.updateStatus();
+          showMobileNotification('İnternet bağlantısı yeniden sağlandı', 'success');
+        });
+        
+        window.addEventListener('offline', () => {
+          this.updateStatus();
+          showMobileNotification('İnternet bağlantısı kesildi. Offline mod aktif.', 'warning');
+        });
+        
+        console.log('✅ Connectivity Manager hazır');
+      },
+      
+      updateStatus: function() {
+        const offlineStatus = document.getElementById('offlineStatus');
+        const connectivityText = document.getElementById('connectivityText');
+        
+        if (!offlineStatus || !connectivityText) return;
+        
+        if (navigator.onLine) {
+          offlineStatus.classList.remove('offline');
+          offlineStatus.classList.add('online');
+          connectivityText.textContent = 'Çevrimiçi';
+          offlineStatus.title = 'İnternet bağlantısı aktif';
+          
+          setTimeout(() => {
+            if (navigator.onLine) {
+              offlineStatus.style.opacity = '0';
+              offlineStatus.style.transform = 'translateY(-10px)';
+              setTimeout(() => {
+                if (navigator.onLine) {
+                  offlineStatus.style.display = 'none';
+                }
+              }, 300);
+            }
+          }, 3000);
+        } else {
+          offlineStatus.classList.remove('online');
+          offlineStatus.classList.add('offline');
+          connectivityText.textContent = 'Çevrimdışı';
+          offlineStatus.title = 'İnternet bağlantısı yok';
+          offlineStatus.style.display = 'flex';
+          offlineStatus.style.opacity = '1';
+          offlineStatus.style.transform = 'translateY(0)';
+        }
+      }
+    },
+    
+    ClipboardSystem: {
+      init: function() {
+        const copyBtn = document.getElementById('copyCPR');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', () => {
+            this.copyCPRToClipboard();
+          });
+        }
+        
+        const toolbarCopyBtn = document.querySelector('.mobile-toolbar button[data-action="copy"]');
+        if (toolbarCopyBtn) {
+          toolbarCopyBtn.addEventListener('click', () => {
+            this.copyActiveTextarea();
+          });
+        }
+        console.log('✅ Kopyalama sistemi hazır');
+      },
+      
+      copyCPRToClipboard: function() {
+        const autoCPR = document.getElementById('autoCPR')?.value;
+        
+        if (!autoCPR || autoCPR.trim().length < 10) {
+          showMobileNotification('Kopyalanacak CPR metni yok', 'warning');
+          return;
+        }
+        
+        this.copyTextToClipboard(autoCPR, 'CPR panoya kopyalandı');
+      },
+      
+      copyActiveTextarea: function() {
+        const activeTextarea = document.activeElement;
+        if (!activeTextarea || activeTextarea.tagName !== 'TEXTAREA') {
+          showMobileNotification('Önce bir metin alanına tıklayın', 'info');
+          return;
+        }
+        
+        const text = activeTextarea.value;
+        if (!text || text.trim().length === 0) {
+          showMobileNotification('Kopyalanacak metin yok', 'warning');
+          return;
+        }
+        
+        this.copyTextToClipboard(text, 'Metin panoya kopyalandı');
+      },
+      
+      copyTextToClipboard: function(text, successMessage) {
+        if (!navigator.clipboard) {
+          this.fallbackCopyTextToClipboard(text, successMessage);
+          return;
+        }
+        
+        navigator.clipboard.writeText(text).then(() => {
+          showMobileNotification(successMessage, 'success');
+        }).catch(err => {
+          console.error('Kopyalama hatası:', err);
+          this.fallbackCopyTextToClipboard(text, successMessage);
+        });
+      },
+      
+      fallbackCopyTextToClipboard: function(text, successMessage) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          const successful = document.execCommand('copy');
+          if (successful) {
+            showMobileNotification(successMessage, 'success');
+          } else {
+            showMobileNotification('Kopyalama başarısız', 'error');
+          }
+        } catch (err) {
+          console.error('Fallback kopyalama hatası:', err);
+          showMobileNotification('Kopyalama başarısız', 'error');
+        }
+        
+        document.body.removeChild(textArea);
+      }
+    },
+    
+    DraftSystem: {
+      storageKey: 'fastcpr_drafts_v2',
+      autoSaveInterval: null,
+      lastSaveTime: null,
+      
+      init: function() {
+        this.setupAutoSave();
+        this.setupDraftButtons();
+        this.updateDraftIndicator();
+        
+        window.addEventListener('load', () => {
+          const hasDrafts = this.hasDrafts();
+          if (hasDrafts) {
+            showMobileNotification('Kayıtlı draft bulundu. Yüklemek için "Draft Listesi" butonunu kullanın.', 'info');
+          }
+        });
+        
+        window.addEventListener('beforeunload', (e) => {
+          this.saveDraft();
+        });
+        
+        console.log('✅ Draft Sistemi hazır');
+      },
+      
+      setupAutoSave: function() {
+        this.autoSaveInterval = setInterval(() => {
+          this.saveDraft(false);
+        }, 30000);
+        
+        document.querySelectorAll('textarea').forEach(textarea => {
+          textarea.addEventListener('input', () => {
+            this.updateDraftIndicator();
+          });
+        });
+      },
+      
+      setupDraftButtons: function() {
+        const saveBtn = document.getElementById('btnSaveDraft');
+        const loadBtn = document.getElementById('btnLoadDraft');
+        const showDraftsBtn = document.getElementById('btnShowDrafts');
+        const clearAllBtn = document.getElementById('btnClearAllDrafts');
+        
+        if (saveBtn) {
+          saveBtn.addEventListener('click', () => {
+            this.saveDraft(true);
+          });
+        }
+        
+        if (showDraftsBtn) {
+          showDraftsBtn.addEventListener('click', () => {
+            this.showDraftSelector();
+          });
+        }
+        
+        if (clearAllBtn) {
+          clearAllBtn.addEventListener('click', () => {
+            if (confirm('Tüm draft\'ları silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')) {
+              localStorage.removeItem(this.storageKey);
+              this.updateDraftIndicator();
+              showMobileNotification('Tüm draft\'lar silindi', 'success');
+            }
+          });
+        }
+      },
+      
+      getCurrentData: function() {
+        return {
+          claim_problem: document.getElementById('base_claim_problem')?.value || '',
+          claim_effect: document.getElementById('base_claim_effect')?.value || '',
+          feature: document.getElementById('base_feat')?.value || '',
+          advantage: document.getElementById('base_adv')?.value || '',
+          benefit: document.getElementById('base_ben')?.value || '',
+          recommendation: document.getElementById('base_rec')?.value || '',
+          autoCPR: document.getElementById('autoCPR')?.value || '',
+          
+          promoContext: document.getElementById('promoContext')?.value || '',
+          learningStyle: document.getElementById('learningStyle')?.value || '',
+          promoGoal: document.getElementById('promoGoal')?.value || '',
+          selectedBehaviors: SocialLearningStyleManager.getSelectedBehaviors() || [],
+          selectedLearningStyle: SocialLearningStyleManager.getSelectedLearningStyle() || '',
+          
+          productName: document.getElementById('productNameInput')?.value || '',
+          competitorName: document.getElementById('competitorNameInput')?.value || '',
+          superiority: document.getElementById('superiorityInput')?.value || '',
+          
+          timestamp: new Date().toISOString(),
+          lastModified: Date.now(),
+          name: `Draft_${new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})}`,
+          version: '2.0'
+        };
+      },
+      
+      saveDraft: function(manual = false) {
+        try {
+          const data = this.getCurrentData();
+          
+          const hasContent = Object.values(data).some(val => 
+            typeof val === 'string' && val.trim().length > 0 && 
+            !['timestamp', 'lastModified', 'name', 'version'].includes(val)
+          );
+          
+          if (!hasContent && !manual) {
+            return false;
+          }
+          
+          const drafts = this.getAllDrafts();
+          
+          drafts.unshift({
+            ...data,
+            id: Date.now(),
+            name: manual ? `Manual_${new Date().toLocaleTimeString('tr-TR')}` : data.name
+          });
+          
+          if (drafts.length > 10) {
+            drafts.length = 10;
+          }
+          
+          localStorage.setItem(this.storageKey, JSON.stringify(drafts));
+          this.lastSaveTime = Date.now();
+          
+          this.updateDraftIndicator();
+          
+          if (manual) {
+            showMobileNotification('Draft kaydedildi', 'success');
+          }
+          
+          return true;
+        } catch (error) {
+          console.error('Draft kaydetme hatası:', error);
+          if (manual) {
+            showMobileNotification('Draft kaydedilemedi', 'error');
+          }
+          return false;
+        }
+      },
+      
+      getAllDrafts: function() {
+        try {
+          const saved = localStorage.getItem(this.storageKey);
+          return saved ? JSON.parse(saved) : [];
+        } catch (error) {
+          console.error('Draft\'lar okunamadı:', error);
+          return [];
+        }
+      },
+      
+      hasDrafts: function() {
+        return this.getAllDrafts().length > 0;
+      },
+      
+      updateDraftIndicator: function() {
+        const indicator = document.getElementById('draftIndicator');
+        const loadBtn = document.getElementById('btnLoadDraft');
+        
+        if (!indicator) return;
+        
+        const drafts = this.getAllDrafts();
+        if (drafts.length > 0) {
+          indicator.classList.add('saved');
+          indicator.innerHTML = `💾 ${drafts.length} Draft`;
+          indicator.title = `${drafts.length} kayıtlı draft var. Son kayıt: ${drafts[0]?.timestamp ? new Date(drafts[0].timestamp).toLocaleTimeString('tr-TR') : 'bilinmiyor'}`;
+          
+          indicator.onclick = () => {
+            this.showDraftSelector();
+          };
+          
+          if (loadBtn) loadBtn.style.display = 'inline-block';
+        } else {
+          indicator.classList.remove('saved');
+          indicator.innerHTML = '💾 Draft Yok';
+          indicator.title = 'Henüz draft kaydedilmedi';
+          indicator.onclick = null;
+          
+          if (loadBtn) loadBtn.style.display = 'none';
+        }
+      },
+      
+      showDraftSelector: function() {
+        const drafts = this.getAllDrafts();
+        if (drafts.length === 0) {
+          showMobileNotification('Kayıtlı draft bulunamadı', 'info');
+          return;
+        }
+        
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0,0,0,0.5);
+          z-index: 4000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        `;
+        
+        let html = `
+          <div style="
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow: auto;
+            box-shadow: var(--shadow);
+            width: 500px;
+          ">
+            <h3 style="margin-top: 0; margin-bottom: 15px; color: var(--accent);">
+              📂 Kayıtlı Draft'lar
+            </h3>
+            <div style="margin-bottom: 20px; font-size: 13px; color: var(--muted);">
+              Toplam ${drafts.length} draft. En son kaydedilenler üstte.
+            </div>
+        `;
+        
+        drafts.forEach((draft, index) => {
+          const time = new Date(draft.timestamp).toLocaleString('tr-TR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          const preview = draft.autoCPR?.substring(0, 80) || 
+                         draft.claim_problem?.substring(0, 80) || 
+                         draft.feature?.substring(0, 80) || 
+                         'Boş draft';
+          
+          html += `
+            <div style="
+              border: 1px solid var(--border);
+              border-radius: 10px;
+              padding: 12px;
+              margin-bottom: 10px;
+              cursor: pointer;
+              transition: all 0.2s;
+              background: ${index === 0 ? 'rgba(11, 95, 255, 0.03)' : 'white'};
+            " 
+            onclick="MobileFeatures.DraftSystem.loadDraft(${draft.id}); 
+                     this.parentElement.parentElement.parentElement.remove();
+                     showMobileNotification('Draft yüklendi', 'success');"
+            onmouseover="this.style.backgroundColor='var(--soft)'"
+            onmouseout="this.style.backgroundColor='${index === 0 ? 'rgba(11, 95, 255, 0.03)' : 'white'}'">
+              <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">
+                ${draft.name || `Draft ${index + 1}`}
+                ${index === 0 ? '<span style="font-size: 11px; background: var(--ok); color: white; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">EN SON</span>' : ''}
+              </div>
+              <div style="font-size: 11px; color: var(--muted); margin-bottom: 6px;">
+                ${time}
+              </div>
+              <div style="font-size: 12px; color: #666; line-height: 1.4;">
+                ${preview}${preview.length >= 80 ? '...' : ''}
+              </div>
+              <div style="margin-top: 8px; display: flex; gap: 8px; font-size: 11px;">
+                <span style="background: var(--soft); padding: 2px 6px; border-radius: 10px;">
+                  ${draft.claim_problem ? '✔ Claim' : '✗ Claim'}
+                </span>
+                <span style="background: var(--soft); padding: 2px 6px; border-radius: 10px;">
+                  ${draft.feature ? '✔ Feature' : '✗ Feature'}
+                </span>
+                <span style="background: var(--soft); padding: 2px 6px; border-radius: 10px;">
+                  ${draft.autoCPR ? '✔ CPR' : '✗ CPR'}
+                </span>
+              </div>
             </div>
           `;
-          
-          list.appendChild(li);
-        }
-      });
-    }
-
-    // ===== ÖNERİLER RENDER =====
-    function renderRecommendations() {
-      const container = document.getElementById('recommendationList');
-      container.innerHTML = '';
-      
-      behaviors.forEach(behavior => {
-        const myVal = mySelections[behavior] || 0;
-        const otherVal = otherSelections[behavior] || 0;
+        });
         
-        if (myVal > 0 && otherVal > 0 && myVal !== otherVal) {
-          const diffType = myVal > otherVal ? 'highLow' : 'lowHigh';
-          const recommendation = recommendations[behavior]?.[diffType];
-          
-          if (recommendation) {
-            const div = document.createElement('div');
-            div.className = 'recommendation-item';
-            div.innerHTML = `
-              <h4>${behavior}</h4>
-              <p>${recommendation}</p>
-            `;
-            container.appendChild(div);
+        html += `
+          <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                    class="btn ghost" 
+                    style="padding: 8px 16px;">
+              Kapat
+            </button>
+            <button onclick="localStorage.removeItem('fastcpr_drafts_v2'); 
+                             MobileFeatures.DraftSystem.updateDraftIndicator(); 
+                             this.parentElement.parentElement.parentElement.remove(); 
+                             showMobileNotification('Tüm draft\\'lar silindi', 'success');" 
+                    class="btn" 
+                    style="padding: 8px 16px; background: var(--bad);">
+              Tümünü Sil
+            </button>
+          </div>
+        `;
+        
+        html += '</div>';
+        modal.innerHTML = html;
+        document.body.appendChild(modal);
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.remove();
           }
+        });
+      }
+    },
+    
+    KeyboardShortcuts: {
+      templates: {
+        claim: [
+          "Hasta tedavisinde zaman kısıtı bulunuyor",
+          "Klinik pratikte sık karşılaşılan bir durum",
+          "Mevcut tedavi seçenekleri yetersiz kalıyor",
+          "Hasta uyumu konusunda zorluk yaşanıyor"
+        ],
+        feature: [
+          "Geniş spektrumlu etkinlik profili",
+          "Uzun yarılanma ömrü ile günde tek doz",
+          "İyi tolere edilebilir yan etki profili",
+          "Pratik kullanım sunan ambalaj tasarımı"
+        ],
+        advantage: [
+          "Benzerlerine göre daha hızlı etki başlangıcı",
+          "Daha iyi güvenlilik profili sunar",
+          "Hasta konforunu artıran özellikler",
+          "Klinik etkinliği kanıtlanmış"
+        ],
+        benefit: [
+          "Tedavi sürecini kısaltır",
+          "Hasta uyumunu artırır",
+          "Yaşam kalitesini yükseltir",
+          "Klinik başarı oranını iyileştirir"
+        ],
+        recommendation: [
+          "Klinik pratiğinizde değerlendirir misiniz?",
+          "Hastalarınız için önerir misiniz?",
+          "Tedavi algoritmanıza eklemeyi düşünür müsünüz?",
+          "Deneyimlerinizi paylaşır mısınız?"
+        ]
+      },
+      
+      init: function() {
+        const toolbar = document.getElementById('mobileToolbar');
+        if (toolbar) {
+          toolbar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+          
+          window.addEventListener('resize', () => {
+            toolbar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+          });
+          
+          toolbar.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (button && button.dataset.action) {
+              this.handleAction(button.dataset.action);
+              button.classList.add('active');
+              setTimeout(() => button.classList.remove('active'), 300);
+            }
+          });
         }
+        
+        document.querySelectorAll('textarea').forEach(textarea => {
+          textarea.addEventListener('focus', () => {
+            if (window.innerWidth <= 768 && toolbar) {
+              toolbar.style.display = 'flex';
+              setTimeout(() => {
+                toolbar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }, 100);
+            }
+          });
+        });
+        
+        console.log('✅ Mobil Toolbar + Şablon Sistemi hazır');
+      },
+      
+      handleAction: function(action) {
+        const activeTextarea = document.activeElement;
+        if (!activeTextarea || activeTextarea.tagName !== 'TEXTAREA') {
+          showMobileNotification('Önce bir metin alanına tıklayın', 'info');
+          return;
+        }
+        
+        switch(action) {
+          case 'claim':
+          case 'feature':
+          case 'advantage':
+          case 'benefit':
+          case 'recommendation':
+            this.insertTemplate(activeTextarea, action);
+            break;
+            
+          case 'copy':
+            this.copyToClipboard(activeTextarea.value);
+            break;
+            
+          case 'paste':
+            this.pasteFromClipboard(activeTextarea);
+            break;
+            
+          case 'clear':
+            activeTextarea.value = '';
+            activeTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+            break;
+        }
+      },
+      
+      insertTemplate: function(textarea, type) {
+        const templates = this.templates[type];
+        if (!templates) return;
+        
+        const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
+        const currentValue = textarea.value.trim();
+        const separator = currentValue && !currentValue.endsWith('.') ? '. ' : ' ';
+        textarea.value = currentValue + (currentValue ? separator : '') + randomTemplate;
+        
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+        textarea.focus();
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        
+        showMobileNotification(`${type} şablonu eklendi`, 'success');
+      },
+      
+      copyToClipboard: function(text) {
+        if (!text.trim()) {
+          showMobileNotification('Kopyalanacak metin yok', 'warning');
+          return;
+        }
+        
+        navigator.clipboard.writeText(text).then(() => {
+          showMobileNotification('Metin panoya kopyalandı', 'success');
+        }).catch(err => {
+          console.error('Kopyalama hatası:', err);
+          showMobileNotification('Kopyalama başarısız', 'error');
+        });
+      },
+      
+      pasteFromClipboard: async function(textarea) {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            const currentValue = textarea.value;
+            const cursorPos = textarea.selectionStart;
+            const newValue = currentValue.substring(0, cursorPos) + text + currentValue.substring(cursorPos);
+            textarea.value = newValue;
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            const newCursorPos = cursorPos + text.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            
+            showMobileNotification('Panodan yapıştırıldı', 'success');
+          }
+        } catch (err) {
+          console.error('Yapıştırma hatası:', err);
+          showMobileNotification('Yapıştırma başarısız', 'error');
+        }
+      }
+    },
+    
+    init: function() {
+      console.log('📱 TÜM FAZLAR: Tüm sistemler yükleniyor...');
+      
+      this.SpeechToText.init();
+      this.ConnectivityManager.init();
+      this.ClipboardSystem.init();
+      this.DraftSystem.init();
+      this.KeyboardShortcuts.init();
+      
+      const toolbar = document.getElementById('mobileToolbar');
+      if (toolbar) {
+        toolbar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+        
+        window.addEventListener('resize', () => {
+          toolbar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+        });
+      }
+      
+      console.log('✅ TÜM FAZLAR: Tüm sistemler yüklendi!');
+    }
+  };
+  
+  // ============================================
+  // TEMEL CPR AKIŞ KONTROL SİSTEMİ
+  // ============================================
+  
+  const CPRFlowControl = {
+    currentCPRScore: 0,
+    isStylesEnabled: false,
+    
+    init: function() {
+        this.setupHintSystem();
+        this.setupFlowControl();
+        this.setupClearButtons();
+        this.setupValidation();
+        this.disableAllStyleFields();
+        this.setupCopyBaseButtons();
+    },
+    
+    disableAllStyleFields: function() {
+        const styleTextareas = document.querySelectorAll('.styled-cpr-area');
+        const styleVoiceBtns = document.querySelectorAll('[data-target*="_cpr"]');
+        
+        styleTextareas.forEach(textarea => {
+            textarea.disabled = true;
+            textarea.placeholder = 'Temel CPR ≥ 13 olunca bu alan aktifleşecek';
+            textarea.style.backgroundColor = '#f5f5f5';
+            textarea.style.color = '#999';
+            textarea.style.cursor = 'not-allowed';
+        });
+        
+        styleVoiceBtns.forEach(btn => {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.title = 'Temel CPR ≥ 13 olmadan kullanılamaz';
+        });
+        
+        document.querySelectorAll('[data-copy-base-to-style]').forEach(btn => {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.title = 'Temel CPR ≥ 13 olmadan kullanılamaz';
+        });
+        
+        this.updateStyleCounter(0);
+    },
+    
+    enableAllStyleFields: function() {
+        const styleTextareas = document.querySelectorAll('.styled-cpr-area');
+        const styleVoiceBtns = document.querySelectorAll('[data-target*="_cpr"]');
+        
+        styleTextareas.forEach(textarea => {
+            textarea.disabled = false;
+            textarea.placeholder = textarea.getAttribute('data-original-placeholder') || 'Buraya yazın...';
+            textarea.style.backgroundColor = '';
+            textarea.style.color = '';
+            textarea.style.cursor = 'text';
+        });
+        
+        styleVoiceBtns.forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.title = 'Sesli giriş';
+        });
+        
+        document.querySelectorAll('[data-copy-base-to-style]').forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.title = 'Temel CPR\'ı bu stile kopyala';
+        });
+        
+        this.updateStyleCounter(4);
+        
+        showMobileNotification('🎉 Stil CPR alanları aktifleşti! Temel CPR\'ı kopyalayarak kullanmaya başlayabilirsiniz.', 'success');
+    },
+    
+    setupCopyBaseButtons: function() {
+        document.querySelectorAll('[data-copy-base-to-style]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (this.currentCPRScore < 13) {
+                    showMobileNotification('Temel CPR\'ı kopyalamak için puan ≥ 13 olmalı', 'warning');
+                    return;
+                }
+                
+                const style = btn.getAttribute('data-copy-base-to-style');
+                this.copyBaseToStyle(style);
+            });
+        });
+    },
+    
+    copyBaseToStyle: function(style) {
+        const autoCPRTextarea = document.getElementById('autoCPR');
+        const autoCPR = autoCPRTextarea ? autoCPRTextarea.value.trim() : '';
+        
+        if (!autoCPR || autoCPR.length < 10) {
+            showMobileNotification('Önce CPR\'ı onaylayın (✅ CPR Onay butonu)', 'warning');
+            return;
+        }
+        
+        const styleTextarea = document.getElementById(`${style}_cpr`);
+        if (styleTextarea) {
+            styleTextarea.value = '';
+            styleTextarea.value = autoCPR;
+            styleTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            const styleNames = {
+                'activist': 'Aktivist',
+                'reflector': 'Reflektör',
+                'theorist': 'Teorist',
+                'pragmatist': 'Pragmatist'
+            };
+            
+            const styleName = styleNames[style] || style;
+            showMobileNotification(`✅ Temel CPR "${styleName}" stilinine kopyalandı`, 'success');
+            
+            setTimeout(() => {
+                styleTextarea.focus();
+                styleTextarea.setSelectionRange(autoCPR.length, autoCPR.length);
+            }, 100);
+        }
+    },
+    
+    updateStyleCounter: function(enabledCount) {
+        const styleCounter = document.getElementById('mini_styles');
+        if (styleCounter) {
+            styleCounter.textContent = `${enabledCount}/4 stil aktif`;
+        }
+    },
+    
+    calculateCPRScore: function() {
+        const problem = document.getElementById('base_claim_problem')?.value.trim() || '';
+        const effect = document.getElementById('base_claim_effect')?.value.trim() || '';
+        const feature = document.getElementById('base_feat')?.value.trim() || '';
+        const advantage = document.getElementById('base_adv')?.value.trim() || '';
+        const benefit = document.getElementById('base_ben')?.value.trim() || '';
+        const recommendation = document.getElementById('base_rec')?.value.trim() || '';
+        
+        let score = 0;
+        
+        if (problem.length > 5) score += 1;
+        if (effect.length > 5) score += 1;
+        if (feature.length > 5) score += 2;
+        if (advantage.length > 5) score += 2;
+        if (benefit.length > 5) score += 2;
+        if (recommendation.length > 5) score += 2;
+        
+        const allFieldsFilled = [problem, effect, feature, advantage, benefit, recommendation]
+            .every(field => field.length > 5);
+        
+        if (allFieldsFilled) {
+            score += 12;
+        }
+        
+        score = Math.min(score, 22);
+        
+        return score;
+    },
+    
+    updateCPRScore: function() {
+        const newScore = this.calculateCPRScore();
+        this.currentCPRScore = newScore;
+        
+        const scoreElement = document.getElementById('mini_base');
+        if (scoreElement) {
+            scoreElement.textContent = `CPR: ${newScore}/22`;
+            
+            if (newScore >= 13) {
+                scoreElement.style.backgroundColor = '#ecfdf3';
+                scoreElement.style.borderColor = '#bbf7d0';
+                scoreElement.style.color = '#166534';
+                scoreElement.title = `Tebrikler! Stil CPR'ları aktifleşti. (${newScore}/22)`;
+                
+                if (!this.isStylesEnabled) {
+                    this.isStylesEnabled = true;
+                    this.enableAllStyleFields();
+                }
+                
+                const copyBtn = document.getElementById('copyCPR');
+                if (copyBtn) {
+                    const autoCPR = document.getElementById('autoCPR')?.value || '';
+                    if (autoCPR.length > 20) {
+                        copyBtn.disabled = false;
+                        copyBtn.style.opacity = '1';
+                        copyBtn.title = 'CPR\'ı panoya kopyala';
+                    }
+                }
+            } else if (newScore >= 8) {
+                scoreElement.style.backgroundColor = '#fffbeb';
+                scoreElement.style.borderColor = '#fed7aa';
+                scoreElement.style.color = '#92400e';
+                scoreElement.title = `Devam edin! Stil CPR'ları için ${13 - newScore} puan daha gerekiyor. (${newScore}/22)`;
+                
+                if (this.isStylesEnabled) {
+                    this.isStylesEnabled = false;
+                    this.disableAllStyleFields();
+                }
+                
+                const copyBtn = document.getElementById('copyCPR');
+                if (copyBtn) {
+                    copyBtn.disabled = true;
+                    copyBtn.style.opacity = '0.5';
+                    copyBtn.title = 'CPR puanı ≥ 13 olmalı';
+                }
+            } else {
+                scoreElement.style.backgroundColor = '#fef2f2';
+                scoreElement.style.borderColor = '#fecaca';
+                scoreElement.style.color = '#b91c1c';
+                scoreElement.title = `Temel CPR'ı geliştirin. Stil CPR'ları için ${13 - newScore} puan daha gerekiyor. (${newScore}/22)`;
+                
+                if (this.isStylesEnabled) {
+                    this.isStylesEnabled = false;
+                    this.disableAllStyleFields();
+                }
+                
+                const copyBtn = document.getElementById('copyCPR');
+                if (copyBtn) {
+                    copyBtn.disabled = true;
+                    copyBtn.style.opacity = '0.5';
+                    copyBtn.title = 'CPR puanı ≥ 13 olmalı';
+                }
+            }
+        }
+        
+        return newScore;
+    },
+    
+    setupHintSystem: function() {
+        document.querySelectorAll('textarea').forEach(textarea => {
+            const hintId = 'hint_' + textarea.id;
+            const hintBox = document.getElementById(hintId);
+            
+            if (hintBox) {
+                textarea.addEventListener('focus', () => {
+                    hintBox.classList.add('show');
+                });
+                
+                textarea.addEventListener('blur', () => {
+                    hintBox.classList.remove('show');
+                });
+            }
+        });
+    },
+    
+    setupFlowControl: function() {
+        const textareas = [
+            'base_claim_problem', 'base_claim_effect', 
+            'base_feat', 'base_adv', 'base_ben', 'base_rec'
+        ];
+        
+        textareas.forEach(id => {
+            const textarea = document.getElementById(id);
+            if (textarea) {
+                textarea.addEventListener('input', () => {
+                    this.updateCPRScore();
+                    
+                    if (typeof AutoCPRGenerator !== 'undefined') {
+                        AutoCPRGenerator.updateAutoCPR();
+                    }
+                });
+            }
+        });
+    },
+    
+    setupClearButtons: function() {
+        const clearButtons = {
+            'clear_base_claim_problem': 'base_claim_problem',
+            'clear_base_feat': 'base_feat',
+            'clear_base_adv': 'base_adv',
+            'clear_base_ben': 'base_ben',
+            'clear_base_rec': 'base_rec'
+        };
+        
+        Object.entries(clearButtons).forEach(([btnId, textareaId]) => {
+            const btn = document.getElementById(btnId);
+            const textarea = document.getElementById(textareaId);
+            
+            if (btn && textarea) {
+                btn.addEventListener('click', () => {
+                    textarea.value = '';
+                    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                    
+                    this.updateCPRScore();
+                    
+                    if (typeof AutoCPRGenerator !== 'undefined') {
+                        AutoCPRGenerator.updateAutoCPR();
+                    }
+                });
+            }
+        });
+    },
+    
+    setupValidation: function() {
+        console.log('✅ CPR akış kontrol sistemi hazır');
+        
+        setTimeout(() => {
+            this.updateCPRScore();
+        }, 100);
+    }
+  };
+  
+  // ============================================
+  // ÜRÜN ODAK & HAZIRLIK
+  // ============================================
+  const ProductPrep = (function(){
+    const KEY = 'fastcpr_productprep_v2';
+
+    const QUICK_SUPERIORITY = [
+      'Etkinlik üstünlüğü',
+      'Güvenlilik profili',
+      'Günde tek doz kolaylığı',
+      'Hızlı etki başlangıcı',
+      'Hasta uyumu / devamlılık',
+      'Stabilite / ambalaj avantajı',
+      'Geniş spektrum / kapsayıcılık'
+    ];
+
+    let state = {
+      products: [],
+      competitors: [],
+      activeProduct: '',
+      activeCompetitor: '',
+      superiority: '',
+    };
+
+    function load(){
+      try{
+        const raw = localStorage.getItem(KEY);
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(parsed && typeof parsed === 'object') state = Object.assign(state, parsed);
+        }
+      }catch(e){}
+    }
+
+    function save(){
+      try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+    }
+
+    function titleCaseTR(input){
+      const s = (input || '').trim().replace(/\s+/g,' ');
+      if(!s) return '';
+      return s.split(' ').map(w=>{
+        const first = w.slice(0,1).toLocaleUpperCase('tr-TR');
+        const rest  = w.slice(1).toLocaleLowerCase('tr-TR');
+        return first + rest;
+      }).join(' ');
+    }
+
+    function setActiveProduct(name){
+      state.activeProduct = name;
+      save();
+      render();
+    }
+
+    function addProduct(name){
+      const n = titleCaseTR(name);
+      if(!n) return;
+      if(!state.products.includes(n)) state.products.unshift(n);
+      state.activeProduct = n;
+      save();
+      render();
+    }
+
+    function removeProduct(name){
+      state.products = state.products.filter(p=>p!==name);
+      if(state.activeProduct === name) state.activeProduct = state.products[0] || '';
+      save();
+      render();
+    }
+
+    function setActiveCompetitor(name){
+      state.activeCompetitor = name;
+      save();
+      renderCompetitors();
+    }
+
+    function addCompetitor(name){
+      const n = titleCaseTR(name);
+      if(!n) return;
+      if(!state.competitors.includes(n)) state.competitors.unshift(n);
+      state.activeCompetitor = n;
+      save();
+      renderCompetitors();
+    }
+
+    function removeCompetitor(name){
+      state.competitors = state.competitors.filter(c=>c!==name);
+      if(state.activeCompetitor === name) state.activeCompetitor = state.competitors[0] || '';
+      save();
+      renderCompetitors();
+    }
+
+    function setSuperiority(text){
+      state.superiority = (text || '').trim();
+      save();
+    }
+
+    function el(id){ return document.getElementById(id); }
+
+    function pill(label, opts){
+      const d = document.createElement('div');
+      d.className = 'pill ' + (opts.className || '');
+      d.textContent = label;
+      if(opts.onClick){
+        d.classList.add('clickable');
+        d.addEventListener('click', opts.onClick);
+      }
+      if(opts.onDblClick){
+        d.addEventListener('dblclick', opts.onDblClick);
+      }
+      return d;
+    }
+
+    function pillWithRemove(label, onRemove, isActive = false) {
+      const d = document.createElement('div');
+      d.className = 'pill removable clickable ' + (isActive ? 'active' : '');
+      
+      const textSpan = document.createElement('span');
+      textSpan.textContent = label;
+      textSpan.style.flex = '1';
+      textSpan.style.marginRight = '4px';
+      
+      const removeBtn = document.createElement('span');
+      removeBtn.className = 'x';
+      removeBtn.textContent = '×';
+      removeBtn.title = 'Kaldır';
+      removeBtn.style.cursor = 'pointer';
+      removeBtn.style.fontWeight = 'bold';
+      removeBtn.style.opacity = '0.7';
+      removeBtn.style.marginLeft = '4px';
+      removeBtn.style.padding = '0 2px';
+      removeBtn.style.borderRadius = '50%';
+      removeBtn.style.width = '16px';
+      removeBtn.style.height = '16px';
+      removeBtn.style.display = 'flex';
+      removeBtn.style.alignItems = 'center';
+      removeBtn.style.justifyContent = 'center';
+      removeBtn.style.backgroundColor = 'rgba(0,0,0,0.05)';
+      
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onRemove();
+      });
+      
+      removeBtn.addEventListener('mouseenter', () => {
+        removeBtn.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+        removeBtn.style.opacity = '1';
+      });
+      
+      removeBtn.addEventListener('mouseleave', () => {
+        removeBtn.style.backgroundColor = 'rgba(0,0,0,0.05)';
+        removeBtn.style.opacity = '0.7';
+      });
+      
+      d.appendChild(textSpan);
+      d.appendChild(removeBtn);
+      
+      return d;
+    }
+
+    function renderProducts(){
+      const wrap = el('productPills');
+      const label = el('activeProductLabel');
+      if(!wrap || !label) return;
+
+      wrap.innerHTML = '';
+      label.textContent = 'Seçilen ürün: ' + (state.activeProduct || '—');
+
+      state.products.forEach(p=>{
+        const d = pillWithRemove(p, 
+          () => removeProduct(p), 
+          p === state.activeProduct
+        );
+        
+        d.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('x')) {
+            setActiveProduct(p);
+          }
+        });
+        
+        wrap.appendChild(d);
       });
     }
 
-    // ===== EVENT LISTENERS =====
-    document.addEventListener('DOMContentLoaded', () => {
-      // Picker'ları doldur
-      populatePickers();
-      
-      // Slider değerlerini başlat
-      updateSliderValue(meSlider, meValue);
-      updateSliderValue(otherSlider, otherValue);
-      
-      // Endpoint label'ları başlat
-      updateEndpointLabels(mePicker, 
-        document.getElementById('meLowLabel'),
-        document.getElementById('meHighLabel'));
-      updateEndpointLabels(otherPicker,
-        document.getElementById('otherLowLabel'),
-        document.getElementById('otherHighLabel'));
-      
-      // Slider değişimleri
-      meSlider.addEventListener('input', () => updateSliderValue(meSlider, meValue));
-      otherSlider.addEventListener('input', () => updateSliderValue(otherSlider, otherValue));
-      
-      // Picker değişimleri
-      mePicker.addEventListener('change', function() {
-        updateEndpointLabels(this, 
-          document.getElementById('meLowLabel'),
-          document.getElementById('meHighLabel'));
-        // Eğer bu davranış daha önce kaydedildiyse, slider'ı o değere getir
-        if (mySelections[this.value]) {
-          meSlider.value = mySelections[this.value];
-          updateSliderValue(meSlider, meValue);
-        }
-      });
-      
-      otherPicker.addEventListener('change', function() {
-        updateEndpointLabels(this,
-          document.getElementById('otherLowLabel'),
-          document.getElementById('otherHighLabel'));
-        if (otherSelections[this.value]) {
-          otherSlider.value = otherSelections[this.value];
-          updateSliderValue(otherSlider, otherValue);
-        }
-      });
-      
-      // Kaydet butonları
-      meSaveBtn.addEventListener('click', () => {
-        const behavior = mePicker.value;
-        const value = meSlider.value;
-        if (saveSelection('me', behavior, value)) {
-          // Sonraki davranışa geç (sırayla)
-          const currentIndex = behaviors.indexOf(behavior);
-          const nextIndex = (currentIndex + 1) % behaviors.length;
-          mePicker.value = behaviors[nextIndex];
-          mePicker.dispatchEvent(new Event('change'));
-        }
-      });
-      
-      otherSaveBtn.addEventListener('click', () => {
-        const behavior = otherPicker.value;
-        const value = otherSlider.value;
-        if (saveSelection('other', behavior, value)) {
-          const currentIndex = behaviors.indexOf(behavior);
-          const nextIndex = (currentIndex + 1) % behaviors.length;
-          otherPicker.value = behaviors[nextIndex];
-          otherPicker.dispatchEvent(new Event('change'));
-        }
-      });
-      
-      // Klavye kısayolları
-      document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+    function renderCompetitors(){
+      const wrap = el('competitorPills');
+      const label = el('activeCompetitorLabel');
+      if(!wrap || !label) return;
+
+      wrap.innerHTML = '';
+      label.textContent = 'Seçilen rakip: ' + (state.activeCompetitor || '—');
+
+      state.competitors.forEach(c=>{
+        const d = pillWithRemove(c, 
+          () => removeCompetitor(c), 
+          c === state.activeCompetitor
+        );
         
-        if (e.key === '1') meSlider.value = 1;
-        else if (e.key === '2') meSlider.value = 2;
-        else if (e.key === '3') meSlider.value = 3;
-        else if (e.key === '4') meSlider.value = 4;
-        else if (e.key === '5') meSlider.value = 5;
-        else if (e.key === '6') meSlider.value = 6;
-        else if (e.key === '7') meSlider.value = 7;
-        else if (e.key === '8') meSlider.value = 8;
-        else if (e.key === '9') meSlider.value = 9;
+        d.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('x')) {
+            setActiveCompetitor(c);
+          }
+        });
         
-        updateSliderValue(meSlider, meValue);
+        wrap.appendChild(d);
       });
+    }
+
+    function renderSuperiority(){
+      const wrap = el('superiorityPills');
+      const input = el('superiorityInput');
+      if(!wrap || !input) return;
+
+      wrap.innerHTML = '';
+      QUICK_SUPERIORITY.forEach(s=>{
+        const d = pill(s, {
+          className: 'clickable',
+          onClick: ()=>{
+            input.value = s;
+            setSuperiority(s);
+          }
+        });
+        wrap.appendChild(d);
+      });
+
+      input.value = state.superiority || '';
+      input.addEventListener('input', ()=>setSuperiority(input.value));
+    }
+
+    function bind(){
+      const addProductBtn = el('addProductBtn');
+      const productInput = el('productNameInput');
+      const addCompetitorBtn = el('addCompetitorBtn');
+      const competitorInput = el('competitorNameInput');
+
+      if(addProductBtn && productInput){
+        addProductBtn.addEventListener('click', ()=>{
+          addProduct(productInput.value);
+          productInput.value = '';
+          productInput.blur();
+        });
+        productInput.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter'){ e.preventDefault(); addProductBtn.click(); }
+        });
+      }
+
+      if(addCompetitorBtn && competitorInput){
+        addCompetitorBtn.addEventListener('click', ()=>{
+          addCompetitor(competitorInput.value);
+          competitorInput.value = '';
+          competitorInput.blur();
+        });
+        competitorInput.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter'){ e.preventDefault(); addCompetitorBtn.click(); }
+        });
+      }
+    }
+
+    function render(){
+      renderProducts();
+      renderCompetitors();
+      renderSuperiority();
+    }
+
+    function init(){
+      load();
+      bind();
+      if(!state.activeProduct && state.products.length) state.activeProduct = state.products[0];
+      if(!state.activeCompetitor && state.competitors.length) state.activeCompetitor = state.competitors[0];
+      render();
+      
+      console.log('✅ Bağımsız Ürün/Rakip sistemi hazır');
+    }
+
+    return { 
+      init,
+      getState: () => state,
+      addProduct,
+      removeProduct,
+      addCompetitor,
+      removeCompetitor
+    };
+  })();
+
+  // ============================================
+  // UTILITY FONKSİYONLAR
+  // ============================================
+  
+  function showMobileNotification(message, type = 'info') {
+    const area = document.getElementById('mobileNotificationArea');
+    if (!area) return;
+    
+    const notification = document.createElement('div');
+    notification.className = `mobile-notification ${type}`;
+    
+    let icon = 'ℹ️';
+    if (type === 'success') icon = '✅';
+    if (type === 'warning') icon = '⚠️';
+    if (type === 'error') icon = '❌';
+    if (type === 'info') icon = 'ℹ️';
+    
+    notification.innerHTML = `
+      <span class="icon">${icon}</span>
+      <span class="message">${message}</span>
+      <button class="close-btn" aria-label="Kapat">×</button>
+    `;
+    
+    area.appendChild(notification);
+    
+    notification.querySelector('.close-btn').addEventListener('click', () => {
+      removeNotification(notification);
     });
+    
+    setTimeout(() => {
+      removeNotification(notification);
+    }, 4000);
+    
+    return notification;
+  }
+  
+  function removeNotification(notification) {
+    if (!notification || !notification.parentNode) return;
+    
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateX(-50%) translateY(-10px)';
+    notification.style.transition = 'opacity 0.3s, transform 0.3s';
+    
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }
+
+  // ============================================
+  // TÜM SİSTEMLERİ BAŞLAT
+  // ============================================
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 FAST CPR KOÇU - GÜVENLİ SÜRÜM v3.2024');
+    
+    // Ek güvenlik kontrolü
+    if (typeof window.__securityCheck !== 'undefined') {
+      console.warn('Güvenlik ihlali tespit edildi');
+      return;
+    }
+    
+    // İşaretleme (tampering detection)
+    window.__securityCheck = 'FAST_CPR_SECURE_v3';
+    
+    // Sistemleri başlat
+    try {
+      AutoCPRGenerator.init();
+      SocialLearningStyleManager.init();
+      MobileFeatures.init();
+      CPRFlowControl.init();
+      ProductPrep.init();
+      
+      // Başarılı başlangıç
+      console.log('✅ Tüm sistemler güvenli başlatıldı');
+      
+      // Copyright bildirimi
+      setTimeout(() => {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
+          background: rgba(0,0,0,0.8);
+          color: white;
+          padding: 8px 12px;
+          border-radius: 8px;
+          font-size: 11px;
+          z-index: 9999;
+          font-family: sans-serif;
+          backdrop-filter: blur(5px);
+        `;
+        notification.textContent = '© 2024 FAST CPR Koçu - Tüm hakları saklıdır';
+        document.body.appendChild(notification);
+        
+        // 10 saniye sonra kaybolur
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.5s';
+            setTimeout(() => notification.remove(), 500);
+          }
+        }, 10000);
+      }, 2000);
+      
+      // PDF butonunu bağla
+      const fullReportBtn = document.getElementById('fullReportPDF');
+      if (fullReportBtn) {
+        fullReportBtn.addEventListener('click', () => {
+          ComprehensivePDFReport.generateFullReport();
+        });
+        
+        fullReportBtn.addEventListener('mouseenter', () => {
+          if (!fullReportBtn.innerHTML.includes('Oluşturuluyor')) {
+            fullReportBtn.style.background = '#2563eb';
+            fullReportBtn.style.transform = 'scale(1.02)';
+          }
+        });
+        
+        fullReportBtn.addEventListener('mouseleave', () => {
+          if (!fullReportBtn.innerHTML.includes('Oluşturuluyor')) {
+            fullReportBtn.style.background = '#3b82f6';
+            fullReportBtn.style.transform = 'scale(1)';
+          }
+        });
+      }
+      
+      // Ses butonlarını bağla
+      document.querySelectorAll('.voice-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          if (btn.disabled) {
+            showMobileNotification('Bu alan Temel CPR ≥ 13 olmadan kullanılamaz', 'warning');
+            return;
+          }
+          
+          const targetId = btn.getAttribute('data-target');
+          if (targetId && MobileFeatures.SpeechToText) {
+            MobileFeatures.SpeechToText.toggleListening(targetId);
+          }
+        });
+      });
+      
+      // Orijinal placeholder'ları kaydet
+      document.querySelectorAll('.styled-cpr-area').forEach(textarea => {
+        textarea.setAttribute('data-original-placeholder', textarea.placeholder);
+      });
+      
+      console.log('✅ TÜM FAZLAR TAMAMLANDI!');
+      
+      // Başlangıç kontrolü
+      setTimeout(() => {
+        if (!navigator.onLine) {
+          showMobileNotification('Çevrimdışı moddasınız. Çalışmalarınız yerelde kaydedilecek.', 'warning');
+        }
+        
+        const drafts = MobileFeatures.DraftSystem.getAllDrafts();
+        if (drafts.length > 0) {
+          console.log(`📊 ${drafts.length} kayıtlı draft bulundu`);
+          showMobileNotification(`${drafts.length} kayıtlı draft bulundu. "Draft Listesi" butonundan yükleyebilirsiniz.`, 'info');
+        }
+        
+        // AutoCPR'i başlangıçta güncelle
+        AutoCPRGenerator.updateAutoCPR();
+        
+        // CPR skorunu başlangıçta göster
+        const initialScore = CPRFlowControl.updateCPRScore();
+        console.log(`📊 Başlangıç CPR skoru: ${initialScore}/22`);
+        
+        if (initialScore < 13) {
+          showMobileNotification(`Temel CPR skorunuz: ${initialScore}/22. Stil alanları için ${13 - initialScore} puan daha gerekiyor.`, 'info');
+        } else {
+          showMobileNotification(`🎉 Tebrikler! Temel CPR skorunuz: ${initialScore}/22. Stil alanları aktif!`, 'success');
+        }
+      }, 500);
+      
+    } catch (error) {
+      console.error('Başlatma hatası:', error);
+      
+      // Hata durumunda kullanıcıya bilgi ver
+      const errorDiv = document.createElement('div');
+      errorDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        text-align: center;
+        z-index: 10000;
+        max-width: 400px;
+        border: 2px solid #ef4444;
+      `;
+      errorDiv.innerHTML = `
+        <h3 style="color: #ef4444; margin-top: 0;">⛔ Sistem Hatası</h3>
+        <p>Araç başlatılırken bir hata oluştu.</p>
+        <p>Lütfen sayfayı yenileyin veya orijinal kaynaktan tekrar deneyin.</p>
+        <button onclick="location.reload()" style="
+          background: #3b82f6;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          margin-top: 15px;
+          cursor: pointer;
+        ">Sayfayı Yenile</button>
+      `;
+      document.body.appendChild(errorDiv);
+    }
+  });
+
+  // ============================================
+  // EK GÜVENLİK FONKSİYONLARI
+  // ============================================
+  
+  // Kod bütünlüğü kontrolü
+  function integrityCheck() {
+    const expectedHash = '9B7A2C';
+    const actualHash = document.getElementById('__verify__')?.textContent?.split('_').pop();
+    
+    if (actualHash !== expectedHash) {
+      console.warn('Kod bütünlüğü ihlali tespit edildi');
+      
+      // Yavaş bozma (graceful degradation)
+      setTimeout(() => {
+        if (window.pdfMake) {
+          window.pdfMake = null;
+        }
+        
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = function() {
+          console.warn('LocalStorage erişimi kısıtlandı');
+          return false;
+        };
+      }, 60000);
+    }
+  }
+  
+  // Periyodik kontrol
+  setInterval(integrityCheck, 300000);
+  
+  // İlk kontrol
+  setTimeout(integrityCheck, 5000);
+
   </script>
 </body>
 </html>
